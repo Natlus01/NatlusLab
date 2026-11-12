@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Input } from '../common/Input';
-import { Monitor, Shield, ArrowRight } from 'lucide-react';
+import { Monitor, ArrowRight, Lock } from 'lucide-react';
 
-interface LoginPageProps {
-  onOpenSubmissionModal?: () => void;
-}
-
-export const LoginPage: React.FC<LoginPageProps> = () => {
+export const LoginPage: React.FC = () => {
   const { login } = useAuth();
 
   const [username, setUsername] = useState('');
@@ -28,16 +24,9 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     }
   };
 
-  const handleQuickDemo = (demoUser: 'admin' | 'staff') => {
-    setUsername(demoUser);
-    setPassword(`${demoUser}123`);
-    setErrorMessage('');
-    login(demoUser, `${demoUser}123`);
-  };
-
   return (
     <div className="min-h-screen flex flex-col justify-between bg-blueGray-800 text-blueGray-100">
-      {/* Notus Auth Top Navbar */}
+      {/* Top Navbar */}
       <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-4 py-3">
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
@@ -51,46 +40,29 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
         </div>
       </nav>
 
-      {/* Main Notus Centered Auth Card */}
+      {/* Centered Auth Card */}
       <main className="container mx-auto px-4 h-full flex-1 flex items-center justify-center pt-20 pb-12">
         <div className="w-full lg:w-4/12 px-4">
           <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-2xl rounded-lg bg-blueGray-100 border border-blueGray-700">
-            {/* Card Header (Quick OAuth style Demo) */}
+            {/* Card Header */}
             <div className="rounded-t mb-0 px-6 py-6 border-b border-blueGray-200">
-              <div className="text-center mb-3">
-                <h6 className="text-blueGray-500 text-xs font-bold uppercase tracking-wider">
-                  Akses Cepat Pengujian Role (Demo)
-                </h6>
+              <div className="flex items-center justify-center gap-2 text-blueGray-600">
+                <div className="w-10 h-10 rounded-full bg-blueGray-800 flex items-center justify-center shadow">
+                  <Lock className="w-5 h-5 text-lightBlue-400" aria-hidden="true" />
+                </div>
+                <div>
+                  <h1 className="text-blueGray-700 font-bold text-sm uppercase tracking-wider">
+                    Masuk ke Sistem
+                  </h1>
+                  <p className="text-blueGray-500 text-xs">
+                    Sistem Manajemen Inventaris Laboratorium
+                  </p>
+                </div>
               </div>
-              <div className="btn-wrapper text-center flex items-center justify-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleQuickDemo('admin')}
-                  className="bg-white active:bg-blueGray-50 text-blueGray-700 font-bold px-3 py-2 rounded outline-none focus:outline-none uppercase shadow hover:shadow-md inline-flex items-center text-xs ease-linear transition-all duration-150 cursor-pointer min-h-[44px]"
-                >
-                  <Shield className="w-4 h-4 mr-1 text-lightBlue-600" aria-hidden="true" />
-                  <span>Demo Admin</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickDemo('staff')}
-                  className="bg-white active:bg-blueGray-50 text-blueGray-700 font-bold px-3 py-2 rounded outline-none focus:outline-none uppercase shadow hover:shadow-md inline-flex items-center text-xs ease-linear transition-all duration-150 cursor-pointer min-h-[44px]"
-                >
-                  <Monitor className="w-4 h-4 mr-1 text-emerald-600" aria-hidden="true" />
-                  <span>Demo Staff</span>
-                </button>
-              </div>
-              <p className="text-[11px] text-center text-blueGray-400 mt-2">
-                admin/admin123 atau staff/staff123
-              </p>
             </div>
 
             {/* Form Body */}
             <div className="flex-auto px-4 lg:px-8 py-8 pt-6">
-              <div className="text-blueGray-400 text-center mb-5 font-bold text-xs uppercase tracking-wider">
-                <span>Atau Masuk dengan Kredensial</span>
-              </div>
-
               {errorMessage && (
                 <div
                   role="alert"
@@ -106,7 +78,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="admin atau staff"
+                  placeholder="Masukkan username Anda"
                   required
                   autoComplete="username"
                 />
@@ -116,7 +88,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="admin123 atau staff123"
+                  placeholder="Masukkan password Anda"
                   required
                   autoComplete="current-password"
                 />
@@ -125,7 +97,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="bg-blueGray-800 text-white active:bg-blueGray-600 text-xs font-bold uppercase px-6 py-3.5 rounded shadow hover:shadow-lg outline-none focus:outline-none w-full ease-linear transition-all duration-150 cursor-pointer flex items-center justify-center gap-2 min-h-[44px]"
+                    className="bg-blueGray-800 text-white active:bg-blueGray-600 text-xs font-bold uppercase px-6 py-3.5 rounded shadow hover:shadow-lg outline-none focus:outline-none w-full ease-linear transition-all duration-150 cursor-pointer flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-60"
                   >
                     <span>{isLoading ? 'Memeriksa...' : 'Masuk ke Sistem'}</span>
                     <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -137,7 +109,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
         </div>
       </main>
 
-      {/* Footer (Notus Auth Footer) */}
+      {/* Footer */}
       <footer className="pb-4">
         <div className="container mx-auto px-4">
           <hr className="mb-4 border-b-1 border-blueGray-700" />

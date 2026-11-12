@@ -1,13 +1,60 @@
-node_modules
-dist
-dist-ssr
-*.local
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Environment variables & credentials
+.env
+.env.local
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+id_rsa
+serviceAccountKey.json
+*serviceAccountKey*.json
+client_secret.json
+*client_secret*.json
+
+# Databases
+*.sqlite
+*.db
+
+# Dependencies & Environments
+node_modules/
+venv/
+.venv/
+vendor/
+
+# Production / Build outputs
+dist/
+dist-ssr/
+build/
+.next/
+out/
+target/
+
+# Python cache & bytecode
+__pycache__/
+*.pyc
+
+# Binaries
+*.exe
+*.dll
+
+# OS generated files
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor & IDE files
+.vscode/
+.idea/
+*.swp
+*.sw?
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+
+# Logs & Cache / Temp
+*.log
+.cache/
+.tmp/
+tmp/

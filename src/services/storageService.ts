@@ -2,17 +2,21 @@ import { Item, User, Transaction } from '../types';
 import { INITIAL_ITEMS, INITIAL_USERS, INITIAL_TRANSACTIONS } from '../data/seedData';
 
 const STORAGE_KEYS = {
-  ITEMS: 'labflow_items_v1',
-  USERS: 'labflow_users_v1',
-  TRANSACTIONS: 'labflow_transactions_v1',
+  ITEMS: 'labflow_items_v2',
+  USERS: 'labflow_users_v2',
+  TRANSACTIONS: 'labflow_transactions_v2',
   AUTH: 'labflow_auth_session_v1',
   THEME: 'labflow_theme_mode_v1',
 };
 
+// Hapus key versi lama agar password lama tidak tersisa di browser
+const OLD_KEYS = ['labflow_users_v1', 'labflow_items_v1', 'labflow_transactions_v1'];
+OLD_KEYS.forEach((k) => localStorage.removeItem(k));
+
 type StorageListener = () => void;
 const listeners: Set<StorageListener> = new Set();
 
-const notifyListeners = () => {
+const notifyLocalListeners = () => {
   listeners.forEach((listener) => {
     try {
       listener();
@@ -20,6 +24,48 @@ const notifyListeners = () => {
       // Safe fail
     }
   });
+};
+
+// BroadcastChannel untuk auto-refresh real-time lintas tab & window browser
+let syncChannel: BroadcastChannel | null = null;
+if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+  try {
+    syncChannel = new BroadcastChannel('natluslab_realtime_sync');
+    syncChannel.onmessage = (event) => {
+      if (event.data?.type === 'NATLUSLAB_DATA_UPDATED') {
+        notifyLocalListeners();
+      }
+    };
+  } catch {
+    // Fallback bila BroadcastChannel tidak didukung
+  }
+}
+
+// Event listener storage untuk sinkronisasi otomatis antar window
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event) => {
+    if (
+      event.key === STORAGE_KEYS.ITEMS ||
+      event.key === STORAGE_KEYS.TRANSACTIONS ||
+      event.key === STORAGE_KEYS.USERS
+    ) {
+      notifyLocalListeners();
+    }
+  });
+}
+
+const notifyListeners = () => {
+  notifyLocalListeners();
+  if (syncChannel) {
+    try {
+      syncChannel.postMessage({
+        type: 'NATLUSLAB_DATA_UPDATED',
+        timestamp: Date.now(),
+      });
+    } catch {
+      // Safe fail
+    }
+  }
 };
 
 export const storageService = {

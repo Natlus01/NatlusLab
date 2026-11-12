@@ -6,6 +6,9 @@ import { Badge } from '../common/Badge';
 import { EmptyState } from '../common/EmptyState';
 import { ItemFormModal } from './ItemFormModal';
 import { DeleteConfirmModal } from './DeleteConfirmModal';
+import { ItemQRCodeModal } from './ItemQRCodeModal';
+import { exportItemsToExcel } from '../../utils/excelExporter';
+import { generateInventoryReportPDF } from '../../utils/pdfGenerator';
 import {
   Plus,
   Edit2,
@@ -13,6 +16,9 @@ import {
   ArrowUpRight,
   Package,
   Layers,
+  QrCode,
+  FileSpreadsheet,
+  FileText,
 } from 'lucide-react';
 
 interface ItemListProps {
@@ -47,6 +53,7 @@ export const ItemList: React.FC<ItemListProps> = ({
   const [isAddEditOpen, setIsAddEditOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [deletingItem, setDeletingItem] = useState<Item | null>(null);
+  const [qrModalItem, setQrModalItem] = useState<Item | null>(null);
   const [notification, setNotification] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
   const categories = useMemo(() => {
@@ -136,16 +143,36 @@ export const ItemList: React.FC<ItemListProps> = ({
               Daftar Barang & Inventaris
             </h1>
           </div>
-          {isAdmin && (
+          <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={handleOpenAdd}
-              className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-xs px-4 py-2.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
+              onClick={() => exportItemsToExcel(items)}
+              title="Unduh rekap inventaris format Excel"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold uppercase text-xs px-3 py-2 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
             >
-              <Plus className="w-4 h-4" aria-hidden="true" />
-              <span>Tambah Barang Baru</span>
+              <FileSpreadsheet className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Ekspor Excel</span>
             </button>
-          )}
+            <button
+              type="button"
+              onClick={() => generateInventoryReportPDF(items)}
+              title="Unduh laporan rekap inventaris format PDF"
+              className="bg-blueGray-700 hover:bg-blueGray-800 text-white font-bold uppercase text-xs px-3 py-2 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <FileText className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Laporan PDF</span>
+            </button>
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={handleOpenAdd}
+                className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <Plus className="w-4 h-4" aria-hidden="true" />
+                <span>Tambah Barang Baru</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Filter and Search Bar */}
@@ -300,6 +327,15 @@ export const ItemList: React.FC<ItemListProps> = ({
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setQrModalItem(item)}
+                          aria-label={`Lihat QR Code ${item.name}`}
+                          title="Lihat & Cetak QR Code Unit"
+                          className="p-1.5 text-blueGray-600 hover:text-lightBlue-600 hover:bg-lightBlue-50 rounded transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center border border-blueGray-200"
+                        >
+                          <QrCode className="w-3.5 h-3.5" aria-hidden="true" />
+                        </button>
                         {onBorrowItemRequest && (
                           <button
                             type="button"
@@ -356,6 +392,12 @@ export const ItemList: React.FC<ItemListProps> = ({
         onClose={() => setDeletingItem(null)}
         onConfirm={handleConfirmDelete}
         item={deletingItem}
+      />
+
+      <ItemQRCodeModal
+        isOpen={!!qrModalItem}
+        onClose={() => setQrModalItem(null)}
+        item={qrModalItem}
       />
     </div>
   );

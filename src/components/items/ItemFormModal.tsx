@@ -36,8 +36,29 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
   const [code, setCode] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState(CATEGORY_OPTIONS[0].value);
-  const [stock, setStock] = useState<number>(1);
+  const [stock, setStock] = useState<number | string>(1);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const handleStockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    if (raw === '') {
+      setStock('');
+      return;
+    }
+    // Hapus karakter non-digit dan strip leading zero (contoh "02" -> "2")
+    const clean = raw.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
+    if (clean === '') {
+      setStock('');
+      return;
+    }
+    setStock(parseInt(clean, 10));
+  };
+
+  const handleStockBlur = () => {
+    if (stock === '' || Number(stock) < 0) {
+      setStock(0);
+    }
+  };
 
   useEffect(() => {
     if (initialItem) {
@@ -64,21 +85,18 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
       setErrorMessage('Nama barang wajib diisi.');
       return;
     }
-    if (stock < 0) {
-      setErrorMessage('Jumlah stok tidak boleh bernilai negatif.');
-      return;
-    }
+    const numStock = Math.max(0, Number(stock) || 0);
 
     const totalStock = initialItem
-      ? initialItem.totalStock + (stock - initialItem.stock)
-      : stock;
+      ? initialItem.totalStock + (numStock - initialItem.stock)
+      : numStock;
 
     const result = onSubmit({
       code: code.trim().toUpperCase(),
       name: name.trim(),
       category,
-      stock: Number(stock),
-      totalStock: Math.max(Number(stock), totalStock),
+      stock: numStock,
+      totalStock: Math.max(numStock, totalStock),
     });
 
     if (result.success) {
@@ -133,7 +151,8 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
           type="number"
           min="0"
           value={stock}
-          onChange={(e) => setStock(parseInt(e.target.value) || 0)}
+          onChange={handleStockChange}
+          onBlur={handleStockBlur}
           required
           helperText="Jumlah fisik barang yang siap dipinjamkan di laboratorium"
         />

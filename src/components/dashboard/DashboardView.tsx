@@ -13,6 +13,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { ActiveTab } from '../layout/Sidebar';
+import { AnalyticsCharts } from './AnalyticsCharts';
 
 interface DashboardViewProps {
   items: Item[];
@@ -124,6 +125,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           onSelectItem={() => onNavigateTab('items')}
         />
       </div>
+
+      {/* Visual Analytics Charts (Recharts) */}
+      <AnalyticsCharts items={items} transactions={transactions} />
     </div>
   );
 };

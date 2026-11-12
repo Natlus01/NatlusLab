@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: natluslab-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-natluslab_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-natluslab_password}
+      POSTGRES_DB: ${DB_NAME:-natluslab_db}
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - natluslab_pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-natluslab_user} -d ${DB_NAME:-natluslab_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  natluslab_pgdata:

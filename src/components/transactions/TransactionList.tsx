@@ -5,11 +5,15 @@ import { Badge } from '../common/Badge';
 import { EmptyState } from '../common/EmptyState';
 import { ReturnModal } from './ReturnModal';
 import { BorrowModal } from './BorrowModal';
+import { exportTransactionsToExcel } from '../../utils/excelExporter';
+import { generateBorrowReceiptPDF } from '../../utils/pdfGenerator';
 import {
   ArrowDownLeft,
   Plus,
   History,
   FileCheck2,
+  FileSpreadsheet,
+  Printer,
 } from 'lucide-react';
 
 interface TransactionListProps {
@@ -99,14 +103,25 @@ export const TransactionList: React.FC<TransactionListProps> = ({
               {title}
             </h1>
           </div>
-          <button
-            type="button"
-            onClick={() => setIsBorrowOpen(true)}
-            className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-xs px-4 py-2.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
-          >
-            <Plus className="w-4 h-4" aria-hidden="true" />
-            <span>Catat Peminjaman Baru</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => exportTransactionsToExcel(transactions)}
+              title="Unduh seluruh riwayat sirkulasi format Excel"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold uppercase text-xs px-3 py-2 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Ekspor Excel</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsBorrowOpen(true)}
+              className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <Plus className="w-4 h-4" aria-hidden="true" />
+              <span>Catat Peminjaman Baru</span>
+            </button>
+          </div>
         </div>
 
         {/* Filter and Search Bar */}
@@ -266,21 +281,31 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                       </Badge>
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                      {trx.status === 'DIPINJAM' ? (
+                      <div className="flex items-center justify-end gap-1.5">
                         <button
                           type="button"
-                          onClick={() => handleReturnAction(trx)}
-                          className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold uppercase text-[10px] px-3 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer inline-flex items-center gap-1 min-h-[32px]"
+                          onClick={() => generateBorrowReceiptPDF(trx)}
+                          title="Cetak Berita Acara / Bukti Peminjaman (PDF)"
+                          className="p-1.5 text-blueGray-600 hover:text-lightBlue-600 hover:bg-lightBlue-50 rounded transition-colors cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center border border-blueGray-200"
                         >
-                          <ArrowDownLeft className="w-3 h-3" aria-hidden="true" />
-                          <span>Kembalikan</span>
+                          <Printer className="w-3.5 h-3.5" aria-hidden="true" />
                         </button>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-blueGray-400 font-semibold">
-                          <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
-                          Tuntas
-                        </span>
-                      )}
+                        {trx.status === 'DIPINJAM' ? (
+                          <button
+                            type="button"
+                            onClick={() => handleReturnAction(trx)}
+                            className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold uppercase text-[10px] px-3 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer inline-flex items-center gap-1 min-h-[32px]"
+                          >
+                            <ArrowDownLeft className="w-3 h-3" aria-hidden="true" />
+                            <span>Kembalikan</span>
+                          </button>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-blueGray-400 font-semibold px-2">
+                            <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+                            Tuntas
+                          </span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

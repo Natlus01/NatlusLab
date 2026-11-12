@@ -45,6 +45,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Right: Actions, User Profile, Logout */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Live Auto-Refresh Indicator */}
+            <div
+              title="Auto-refresh aktif: data otomatis tersinkronisasi secara real-time"
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blueGray-900/80 border border-emerald-500/40 text-[11px] text-emerald-400 font-semibold select-none shadow-xs"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>Auto-Sync Aktif</span>
+            </div>
+
             {/* User profile pill */}
             {currentUser && (
               <div className="flex items-center gap-2 pl-3 border-l border-blueGray-700">

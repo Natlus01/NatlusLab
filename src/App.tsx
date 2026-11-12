@@ -8,6 +8,8 @@ import { ActiveTab } from './components/layout/Sidebar';
 import { DashboardView } from './components/dashboard/DashboardView';
 import { ItemList } from './components/items/ItemList';
 import { TransactionList } from './components/transactions/TransactionList';
+import { BorrowView } from './components/transactions/BorrowView';
+import { ReturnView } from './components/transactions/ReturnView';
 import { UserList } from './components/users/UserList';
 import { SettingsView } from './components/settings/SettingsView';
 import { BorrowModal } from './components/transactions/BorrowModal';
@@ -36,10 +38,34 @@ export const App: React.FC = () => {
   useEffect(() => {
     storageService.init();
     loadData();
+
+    // 1. Subscription event internal & BroadcastChannel lintas tab
     const unsubscribe = storageService.subscribe(() => {
       loadData();
     });
-    return () => unsubscribe();
+
+    // 2. Interval background auto-refresh (setiap 3 detik memastikan data selalu mutakhir)
+    const intervalId = setInterval(() => {
+      loadData();
+    }, 3000);
+
+    // 3. Auto-refresh saat tab kembali difokuskan oleh pengguna
+    const handleFocus = () => loadData();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        loadData();
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      unsubscribe();
+      clearInterval(intervalId);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   // Role guard: If a staff user is on an admin-only tab, redirect to dashboard
@@ -137,26 +163,18 @@ export const App: React.FC = () => {
       )}
 
       {activeTab === 'borrow' && (
-        <TransactionList
-          transactions={transactions}
+        <BorrowView
           items={items}
           currentUser={currentUser}
           onBorrowSubmit={handleBorrowSubmit}
-          onReturnSubmit={handleReturnSubmit}
-          defaultFilter="DIPINJAM"
-          title="Peminjaman Barang Laboratorium"
         />
       )}
 
       {activeTab === 'return' && (
-        <TransactionList
+        <ReturnView
           transactions={transactions}
-          items={items}
           currentUser={currentUser}
-          onBorrowSubmit={handleBorrowSubmit}
           onReturnSubmit={handleReturnSubmit}
-          defaultFilter="DIPINJAM"
-          title="Pengembalian Barang yang Sedang Dipinjam"
         />
       )}
 

@@ -3,9 +3,13 @@
 Sistem informasi pengelolaan inventaris dan transaksi peminjaman alat/perangkat laboratorium komputer secara digital berbasis web mandiri (*self-hosted*). Dirancang dengan arsitektur modern, cepat, responsif, dan siap produksi.
 
 - **Frontend:** React 18, TypeScript, Tailwind CSS, Vite
-- **Database:** PostgreSQL (Relational Database Management System)
-- **Web Server & Reverse Proxy:** Nginx di Ubuntu Server
-- **Keamanan & SSL:** Let's Encrypt (Certbot HTTPS)
+- **Backend API:** Node.js, Express.js 5, TypeScript (TSX Runtime)
+- **Database:** PostgreSQL 16 (Relational Database Management System di Docker)
+- **Visual Analytics:** Recharts (Diagram Batang & Lingkaran Interaktif)
+- **Identifikasi Cepat:** QR Code Generator (`qrcode.react`) & Kamera Scanner Real-time (`html5-qrcode`)
+- **Dokumen Resmi:** jsPDF & autoTable (Cetak Berita Acara Peminjaman & Rekapitulasi PDF)
+- **Spreadsheet:** SheetJS / xlsx (Ekspor Data Inventaris & Transaksi ke Excel)
+- **Infrastruktur & Tunnel:** Ubuntu Server, PM2 Process Manager, Cloudflare Tunnel (SSL HTTPS)
 
 ---
 
@@ -18,8 +22,16 @@ Sistem memiliki dua tingkat hak akses (Role-Based Access Control) terproteksi:
 | **ADMIN** | `admin` | `admin123` | Akses penuh dashboard analitik, manajemen inventaris barang (CRUD), kelola akun Staff (tambah, ubah, aktif/nonaktif), pantau & proses seluruh sirkulasi transaksi, ekspor & impor cadangan data JSON |
 | **STAFF** | `staff` | `staff123` | Akses operasional harian: monitoring stok ketersediaan unit laboratorium, pencatatan peminjaman baru, pemrosesan pengembalian barang, serta riwayat transaksi terkait |
 
-> [!TIP]
-> Pada halaman login tersedia tombol akses cepat **Demo Admin** dan **Demo Staff** untuk pengujian langsung. Untuk lingkungan produksi mandiri, Anda dapat mengubah kredensial atau menambahkan staf baru melalui menu **Manajemen Staff**.
+> [!IMPORTANT]
+> **Kebijakan Keamanan Kredensial Repositori Publik:**
+> Demi mematuhi prinsip keamanan standar (*Security Best Practices & OWASP*), kata sandi akun administratif pada server hosting publik **tidak dipublikasikan secara terbuka pada repositori GitHub ini**. 
+> - Kredensial akun pengujian untuk Dosen/Penilai dicantumkan secara khusus pada form pengumpulan tugas resmi.
+> - Untuk lingkungan pengembangan lokal (*Local Development*), pengembang dapat mengatur kata sandi secara bebas melalui berkas konfigurasi `.env`.
+
+> [!NOTE]
+> **Keamanan Sesi Terproteksi:**
+> - Sesi login otomatis berakhir saat tab browser ditutup (*session isolation*).
+> - Auto logout otomatis aktif jika tidak ada aktivitas pengguna selama 15 menit (*idle timeout*).
 
 ---
 
@@ -32,25 +44,41 @@ Sistem memiliki dua tingkat hak akses (Role-Based Access Control) terproteksi:
 
 ### B. Dashboard Analitik & Monitoring
 - Metrik akumulasi: total jenis barang terdaftar, unit siap dipinjam, unit sedang dipinjam secara riil, dan total transaksi sirkulasi.
+- **Visualisasi Grafik Interaktif (Recharts):**
+  - *Bar Chart*: Perbandingan ketersediaan stok lab vs sedang dipinjam per kategori perangkat.
+  - *Pie Chart*: Proporsi rasio total unit aset laboratorium.
 - Pemantauan status ketersediaan barang berstatus kritis/menipis secara otomatis.
 - Ringkasan aktivitas transaksi peminjaman dan pengembalian paling baru.
+- **Indikator Live-Sync:** Pembaruan data otomatis (*auto-refresh*) secara *real-time* lintas tab.
 
 ### C. Manajemen Data Inventaris (Admin)
 - Penambahan dan pembaruan data barang (kode unik, nama, kategori, stok unit).
+- **Stiker QR Code Inventaris:** Pembuatan stiker QR Code unik per barang yang dapat diunduh (SVG) dan dicetak fisik untuk ditempelkan pada perangkat.
+- **Ekspor Dokumen & Laporan:**
+  - Unduh rekapitulasi inventaris ke format spreadsheet **Excel (`.xlsx`)**.
+  - Cetak **Laporan Rekapitulasi Inventaris (PDF)** resmi siap arsip.
 - Filter pencarian cepat berdasarkan kata kunci nama, kode barang, kategori, serta status ketersediaan.
 - Proteksi penghapusan aman: barang yang unitnya sedang dalam masa peminjaman aktif dicegah untuk dihapus dari basis data.
 
 ### D. Manajemen Sirkulasi Peminjaman (Admin & Staff)
-- Formulir pencatatan peminjaman terintegrasi: identitas peminjam, pilihan barang, jumlah unit yang diambil, tanggal pinjam, dan catatan operasional.
+- **Halaman Khusus Formulir Peminjaman:** Antarmuka formulir terpadu yang siap diisi langsung tanpa perlu membuka modal tersembunyi.
+- **Pemindai Kamera QR Code (Scanner Real-time):** Petugas dapat memindai stiker QR pada fisik alat secara instan menggunakan kamera laptop/ponsel.
+- **Katalog Cepat Unit Tersedia:** Panel samping menampilkan daftar barang yang memiliki stok siap pinjam (cukup klik nama barang untuk langsung memilihnya).
 - Validasi stok cerdas: peminjaman ditolak jika permintaan melebihi jumlah unit yang tersedia di laboratorium.
-- Sinkronisasi otomatis: unit stok berkurang seketika saat peminjaman divalidasi dengan status `DIPINJAM`.
+- **Cetak Bukti Peminjaman (PDF):** Cetak otomatis Berita Acara Peminjaman lengkap dengan kop resmi lab, nomor transaksi, dan kolom tanda tangan.
 
 ### E. Pemrosesan Pengembalian Barang (Admin & Staff)
-- Daftar monitoring barang yang sedang dipinjam.
+- **Halaman Khusus Monitoring Pengembalian:** Hanya menampilkan barang yang masih berstatus `DIPINJAM` untuk memudahkan pengawasan petugas.
+- Kartu indikator KPI memantau jumlah transaksi aktif dan total fisik unit yang masih berada di luar lab.
 - Formulir pengembalian: verifikasi tanggal kembali serta pencatatan kondisi fisik peralatan.
 - Pengembalian unit stok ke laboratorium secara otomatis dengan pembaruan status transaksi menjadi `SELESAI`.
 
-### F. Manajemen Pengguna & Hak Akses (Admin)
+### F. Riwayat Transaksi & Logbook Sirkulasi
+- Rekapitulasi komprehensif seluruh aktivitas peminjaman dan pengembalian.
+- Filter status transaksi: `Semua`, `Sedang Dipinjam`, dan `Selesai`.
+- Ekspor seluruh histori sirkulasi ke berkas **Excel (`.xlsx`)** dan cetak ulang bukti peminjaman PDF.
+
+### G. Manajemen Pengguna & Hak Akses (Admin)
 - Pembuatan dan pembaruan akun staf laboratorium.
 - Fitur aktivasi dan nonaktivasi instan akun staf tanpa menghapus riwayat transaksi yang pernah diproses.
 
