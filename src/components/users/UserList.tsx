@@ -81,12 +81,12 @@ export const UserList: React.FC<UserListProps> = ({
   return (
     <div className="space-y-6">
       {/* Header bar and Add Staff button */}
-      <div className="p-5 rounded-lg border border-blueGray-200 dark:border-blueGray-700 bg-white dark:bg-blueGray-800 shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="p-5 rounded-lg border border-blueGray-200 bg-white shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h6 className="text-xs uppercase font-bold text-blueGray-400">
             Administrasi Pengguna
           </h6>
-          <h1 className="text-xl font-bold uppercase tracking-tight text-blueGray-800 dark:text-blueGray-100 mt-0.5">
+          <h1 className="text-xl font-bold uppercase tracking-tight text-blueGray-800 mt-0.5">
             Manajemen Akun Staff Laboratorium
           </h1>
         </div>
@@ -105,8 +105,8 @@ export const UserList: React.FC<UserListProps> = ({
           role="status"
           className={`p-3 rounded text-xs font-semibold border ${
             notification.type === 'success'
-              ? 'bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800'
-              : 'bg-rose-50 text-rose-900 border-rose-200 dark:bg-rose-950/50 dark:text-rose-200 dark:border-rose-800'
+              ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+              : 'bg-rose-50 text-rose-900 border-rose-200'
           }`}
         >
           {notification.text}
@@ -114,33 +114,33 @@ export const UserList: React.FC<UserListProps> = ({
       )}
 
       {/* Notus CardTable */}
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white dark:bg-blueGray-800 border border-blueGray-100 dark:border-blueGray-700 overflow-hidden">
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border border-blueGray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="items-center w-full bg-transparent border-collapse text-left text-xs">
             <thead>
               <tr>
-                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Nama Petugas
                 </th>
-                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Username
                 </th>
-                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Role Akses
                 </th>
-                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Status
                 </th>
-                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-right bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-right bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Kelola
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-blueGray-100 dark:divide-blueGray-700">
+            <tbody className="divide-y divide-blueGray-100">
               {users.map((user) => (
                 <tr
                   key={user.id}
-                  className="hover:bg-blueGray-50/70 dark:hover:bg-blueGray-700/40 transition-colors"
+                  className="hover:bg-blueGray-50/70 transition-colors"
                 >
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <div className="flex items-center gap-2.5">
@@ -151,7 +151,7 @@ export const UserList: React.FC<UserListProps> = ({
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <span className="font-bold text-blueGray-800 dark:text-blueGray-100 block text-sm">
+                        <span className="font-bold text-blueGray-800 block text-sm">
                           {user.name}
                         </span>
                         <span className="text-[10px] text-blueGray-400">
@@ -160,7 +160,7 @@ export const UserList: React.FC<UserListProps> = ({
                       </div>
                     </div>
                   </td>
-                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 font-mono font-bold text-blueGray-700 dark:text-blueGray-300">
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 font-mono font-bold text-blueGray-700">
                     @{user.username}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
@@ -192,7 +192,7 @@ export const UserList: React.FC<UserListProps> = ({
                           onClick={() => handleToggle(user.id)}
                           className={`font-bold uppercase text-[10px] px-3 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1 min-h-[32px] ${
                             user.isActive
-                              ? 'bg-blueGray-200 hover:bg-blueGray-300 text-blueGray-700 dark:bg-blueGray-700 dark:hover:bg-blueGray-600 dark:text-blueGray-200'
+                              ? 'bg-blueGray-200 hover:bg-blueGray-300 text-blueGray-700'
                               : 'bg-emerald-600 hover:bg-emerald-700 text-white'
                           }`}
                           title={
@@ -219,7 +219,7 @@ export const UserList: React.FC<UserListProps> = ({
                         onClick={() => handleOpenEdit(user)}
                         aria-label={`Ubah kredensial ${user.name}`}
                         title="Ubah data atau password"
-                        className="p-1.5 text-blueGray-500 hover:text-lightBlue-600 hover:bg-blueGray-100 dark:hover:bg-blueGray-700 rounded transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+                        className="p-1.5 text-blueGray-500 hover:text-lightBlue-600 hover:bg-blueGray-100 rounded transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                       >
                         <Edit2 className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>

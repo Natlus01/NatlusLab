@@ -40,7 +40,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Notus Header Banner & Stats (HeaderStats.js style) */}
-      <div className="relative bg-blueGray-800 dark:bg-slate-900 rounded-xl p-6 sm:p-8 shadow-lg text-white">
+      <div className="relative bg-blueGray-800 rounded-xl p-6 sm:p-8 shadow-lg text-white">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-blueGray-700">
           <div>
             <h6 className="text-xs uppercase font-bold text-lightBlue-400 tracking-wider">

@@ -89,13 +89,13 @@ export const TransactionList: React.FC<TransactionListProps> = ({
   return (
     <div className="space-y-6">
       {/* Header bar and action controls */}
-      <div className="p-5 rounded-lg border border-blueGray-200 dark:border-blueGray-700 bg-white dark:bg-blueGray-800 shadow-lg space-y-4">
+      <div className="p-5 rounded-lg border border-blueGray-200 bg-white shadow-lg space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h6 className="text-xs uppercase font-bold text-blueGray-400">
               Sirkulasi Peralatan Laboratorium
             </h6>
-            <h1 className="text-xl font-bold uppercase tracking-tight text-blueGray-800 dark:text-blueGray-100 mt-0.5">
+            <h1 className="text-xl font-bold uppercase tracking-tight text-blueGray-800 mt-0.5">
               {title}
             </h1>
           </div>
@@ -110,7 +110,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
         </div>
 
         {/* Filter and Search Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-blueGray-100 dark:border-blueGray-700">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-blueGray-100">
           <div className="md:col-span-2">
             <SearchBar
               value={searchTerm}
@@ -120,14 +120,14 @@ export const TransactionList: React.FC<TransactionListProps> = ({
             />
           </div>
           <div>
-            <div className="flex rounded border border-blueGray-200 dark:border-blueGray-700 p-1 bg-blueGray-50 dark:bg-blueGray-900">
+            <div className="flex rounded border border-blueGray-200 p-1 bg-blueGray-50">
               <button
                 type="button"
                 onClick={() => setStatusFilter('ALL')}
                 className={`flex-1 py-1 px-2 text-xs font-bold uppercase rounded transition-colors cursor-pointer ${
                   statusFilter === 'ALL'
-                    ? 'bg-white dark:bg-blueGray-800 text-blueGray-800 dark:text-blueGray-100 shadow-xs'
-                    : 'text-blueGray-400 hover:text-blueGray-700 dark:hover:text-blueGray-200'
+                    ? 'bg-white text-blueGray-800 shadow-xs'
+                    : 'text-blueGray-400 hover:text-blueGray-700'
                 }`}
               >
                 Semua ({transactions.length})
@@ -137,8 +137,8 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                 onClick={() => setStatusFilter('DIPINJAM')}
                 className={`flex-1 py-1 px-2 text-xs font-bold uppercase rounded transition-colors cursor-pointer ${
                   statusFilter === 'DIPINJAM'
-                    ? 'bg-white dark:bg-blueGray-800 text-orange-600 dark:text-orange-400 shadow-xs'
-                    : 'text-blueGray-400 hover:text-blueGray-700 dark:hover:text-blueGray-200'
+                    ? 'bg-white text-orange-600 shadow-xs'
+                    : 'text-blueGray-400 hover:text-blueGray-700'
                 }`}
               >
                 Dipinjam ({transactions.filter((t) => t.status === 'DIPINJAM').length})
@@ -148,8 +148,8 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                 onClick={() => setStatusFilter('SELESAI')}
                 className={`flex-1 py-1 px-2 text-xs font-bold uppercase rounded transition-colors cursor-pointer ${
                   statusFilter === 'SELESAI'
-                    ? 'bg-white dark:bg-blueGray-800 text-emerald-600 dark:text-emerald-400 shadow-xs'
-                    : 'text-blueGray-400 hover:text-blueGray-700 dark:hover:text-blueGray-200'
+                    ? 'bg-white text-emerald-600 shadow-xs'
+                    : 'text-blueGray-400 hover:text-blueGray-700'
                 }`}
               >
                 Selesai ({transactions.filter((t) => t.status === 'SELESAI').length})
@@ -162,7 +162,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
       {notification && (
         <div
           role="status"
-          className="p-3 bg-emerald-50 text-emerald-900 border border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800 rounded text-xs font-semibold"
+          className="p-3 bg-emerald-50 text-emerald-900 border border-emerald-200 rounded text-xs font-semibold"
         >
           {notification}
         </div>
@@ -184,48 +184,48 @@ export const TransactionList: React.FC<TransactionListProps> = ({
           onAction={() => setIsBorrowOpen(true)}
         />
       ) : (
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white dark:bg-blueGray-800 border border-blueGray-100 dark:border-blueGray-700 overflow-hidden">
+        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border border-blueGray-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="items-center w-full bg-transparent border-collapse text-left text-xs">
               <thead>
                 <tr>
-                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                     Kode Transaksi
                   </th>
-                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                     Peminjam
                   </th>
-                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                     Peralatan
                   </th>
-                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                     Jumlah
                   </th>
-                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                     Tgl Pinjam
                   </th>
-                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                     Tgl Kembali
                   </th>
-                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                     Status
                   </th>
-                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-right bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-right bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                     Aksi
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-blueGray-100 dark:divide-blueGray-700">
+              <tbody className="divide-y divide-blueGray-100">
                 {filtered.map((trx) => (
                   <tr
                     key={trx.id}
-                    className="hover:bg-blueGray-50/70 dark:hover:bg-blueGray-700/40 transition-colors"
+                    className="hover:bg-blueGray-50/70 transition-colors"
                   >
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 font-mono font-bold text-lightBlue-600 dark:text-lightBlue-400">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 font-mono font-bold text-lightBlue-600">
                       {trx.transactionCode}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <div className="font-bold text-blueGray-800 dark:text-blueGray-100">
+                      <div className="font-bold text-blueGray-800">
                         {trx.borrowerName}
                       </div>
                       {trx.notes && (
@@ -235,7 +235,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                       )}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <span className="font-semibold text-blueGray-700 dark:text-blueGray-200">
+                      <span className="font-semibold text-blueGray-700">
                         {trx.itemName}
                       </span>
                       <span className="text-[11px] text-blueGray-400 font-mono ml-1.5">
@@ -245,12 +245,12 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center font-bold tabular-nums">
                       {trx.quantity}
                     </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 tabular-nums text-blueGray-600 dark:text-blueGray-300">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 tabular-nums text-blueGray-600">
                       {trx.borrowDate}
                     </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 tabular-nums text-blueGray-600 dark:text-blueGray-300">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 tabular-nums text-blueGray-600">
                       {trx.returnDate ? (
-                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                        <span className="text-emerald-600 font-semibold">
                           {trx.returnDate}
                         </span>
                       ) : (

@@ -70,38 +70,38 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorMessage && (
-          <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 rounded-lg text-xs text-rose-800 dark:text-rose-200">
+          <div className="p-3 bg-red-50 border border-red-200 rounded text-xs text-red-800 font-bold">
             {errorMessage}
           </div>
         )}
 
         {/* Transaction Summary Card */}
-        <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
+        <div className="p-4 rounded bg-blueGray-50 border border-blueGray-200 text-xs space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-mono font-bold text-teal-800 dark:text-teal-300">
+            <span className="font-mono font-bold text-lightBlue-600">
               {transaction.transactionCode}
             </span>
             <Badge variant="warning" className="text-[10px]">
               Sedang Dipinjam
             </Badge>
           </div>
-          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-700">
+          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-blueGray-200">
             <div>
-              <span className="text-slate-500 block">Nama Peminjam:</span>
-              <strong className="text-slate-900 dark:text-slate-100">{transaction.borrowerName}</strong>
+              <span className="text-blueGray-400 block">Nama Peminjam:</span>
+              <strong className="text-blueGray-800">{transaction.borrowerName}</strong>
             </div>
             <div>
-              <span className="text-slate-500 block">Peralatan:</span>
-              <strong className="text-slate-900 dark:text-slate-100">
+              <span className="text-blueGray-400 block">Peralatan:</span>
+              <strong className="text-blueGray-800">
                 {transaction.quantity} unit {transaction.itemName}
               </strong>
             </div>
             <div>
-              <span className="text-slate-500 block">Tanggal Pinjam:</span>
-              <span className="tabular-nums font-medium">{transaction.borrowDate}</span>
+              <span className="text-blueGray-400 block">Tanggal Pinjam:</span>
+              <span className="tabular-nums font-semibold">{transaction.borrowDate}</span>
             </div>
             <div>
-              <span className="text-slate-500 block">Diproses Oleh:</span>
+              <span className="text-blueGray-400 block">Diproses Oleh:</span>
               <span>{transaction.processedByUserName}</span>
             </div>
           </div>
@@ -122,14 +122,14 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({
           placeholder="Contoh: Kondisi baik, kabel lengkap, telah dicek menyala"
         />
 
-        <div className="p-3 rounded-lg bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 text-xs text-teal-900 dark:text-teal-200">
-          <p className="font-semibold">Konfirmasi Stok Otomatis:</p>
+        <div className="p-3 rounded bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
+          <p className="font-bold">Konfirmasi Stok Otomatis:</p>
           <p className="mt-0.5 text-[11px]">
             Setelah pengembalian diproses, stok <strong>{transaction.itemName}</strong> akan bertambah kembali sebesar <strong>{transaction.quantity} unit</strong>.
           </p>
         </div>
 
-        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t border-blueGray-200">
           <Button variant="outline" type="button" onClick={onClose}>
             Batal
           </Button>

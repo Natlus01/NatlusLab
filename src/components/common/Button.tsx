@@ -16,7 +16,6 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  // Notus style: uppercase bold text with shadow and clean radius
   const baseClasses =
     'inline-flex items-center justify-center font-bold uppercase tracking-wider rounded transition-all outline-none focus:outline-none select-none';
 
@@ -28,15 +27,15 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantClasses = {
     primary:
-      'bg-lightBlue-500 hover:bg-lightBlue-600 active:bg-lightBlue-700 text-white shadow hover:shadow-md disabled:bg-blueGray-300 dark:disabled:bg-blueGray-700 disabled:text-blueGray-400',
+      'bg-lightBlue-500 hover:bg-lightBlue-600 active:bg-lightBlue-700 text-white shadow hover:shadow-md disabled:bg-blueGray-300 disabled:text-blueGray-400',
     secondary:
-      'bg-blueGray-800 hover:bg-blueGray-900 active:bg-black text-white shadow hover:shadow-md dark:bg-blueGray-700 dark:hover:bg-blueGray-600 disabled:bg-blueGray-300 dark:disabled:bg-blueGray-700 disabled:text-blueGray-400',
+      'bg-blueGray-800 hover:bg-blueGray-900 active:bg-black text-white shadow hover:shadow-md disabled:bg-blueGray-300 disabled:text-blueGray-400',
     danger:
-      'bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow hover:shadow-md disabled:bg-blueGray-300 dark:disabled:bg-blueGray-700 disabled:text-blueGray-400',
+      'bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow hover:shadow-md disabled:bg-blueGray-300 disabled:text-blueGray-400',
     outline:
-      'border border-blueGray-300 dark:border-blueGray-600 bg-white dark:bg-blueGray-800 text-blueGray-700 dark:text-blueGray-200 hover:bg-blueGray-50 dark:hover:bg-blueGray-700 shadow-xs disabled:border-blueGray-200 disabled:text-blueGray-400',
+      'border border-blueGray-300 bg-white text-blueGray-700 hover:bg-blueGray-50 shadow-xs disabled:border-blueGray-200 disabled:text-blueGray-400',
     ghost:
-      'text-blueGray-600 hover:text-blueGray-900 hover:bg-blueGray-100 dark:text-blueGray-300 dark:hover:bg-blueGray-700 disabled:text-blueGray-400',
+      'text-blueGray-600 hover:text-blueGray-900 hover:bg-blueGray-100 disabled:text-blueGray-400',
   };
 
   const cursorClass = disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer';

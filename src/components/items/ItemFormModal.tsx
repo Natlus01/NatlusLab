@@ -98,7 +98,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorMessage && (
-          <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 rounded-lg text-xs text-rose-800 dark:text-rose-200">
+          <div className="p-3 bg-red-50 border border-red-200 rounded text-xs text-red-800 font-bold">
             {errorMessage}
           </div>
         )}
@@ -138,7 +138,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
           helperText="Jumlah fisik barang yang siap dipinjamkan di laboratorium"
         />
 
-        <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-end gap-2 pt-4 border-t border-blueGray-200">
           <Button variant="outline" type="button" onClick={onClose}>
             Batal
           </Button>

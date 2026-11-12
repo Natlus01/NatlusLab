@@ -69,7 +69,7 @@ CODING TALENT CHALLENGE
    - Username             : staff
    - Password             : staff123
 7. Teknologi Digunakan    :
-   - Framework & UI       : React 18 (TypeScript) + Tailwind CSS (Inspirasi Notus NextJS) + Vite
+   - Framework & UI       : React 18 (TypeScript) + Tailwind CSS (Notus NextJS Light Theme) + Vite
    - State & Persistence  : Reactive LocalStorage Engine + JSON Backup/Export
    - Hosting Platform     : Vercel / Netlify
 ==============================`;
@@ -90,8 +90,8 @@ CODING TALENT CHALLENGE
     >
       <div className="space-y-5">
         {/* Student Data Form */}
-        <form onSubmit={handleSaveStudentInfo} className="p-4 rounded-lg bg-blueGray-50 dark:bg-blueGray-900 border border-blueGray-200 dark:border-blueGray-700 space-y-3">
-          <p className="text-xs font-bold uppercase text-blueGray-600 dark:text-blueGray-300">
+        <form onSubmit={handleSaveStudentInfo} className="p-4 rounded-lg bg-blueGray-50 border border-blueGray-200 space-y-3">
+          <p className="text-xs font-bold uppercase text-blueGray-600">
             Identitas Mahasiswa Pengumpul
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -123,32 +123,32 @@ CODING TALENT CHALLENGE
 
         {/* Demo Accounts Box */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="p-3.5 rounded-lg border border-lightBlue-200 dark:border-lightBlue-800 bg-lightBlue-50/60 dark:bg-lightBlue-950/30">
-            <p className="text-xs font-bold text-lightBlue-900 dark:text-lightBlue-200 uppercase mb-1">
+          <div className="p-3.5 rounded-lg border border-lightBlue-200 bg-lightBlue-50/60">
+            <p className="text-xs font-bold text-lightBlue-900 uppercase mb-1">
               Akun Demo Admin
             </p>
-            <p className="text-xs text-blueGray-700 dark:text-blueGray-300">
-              Username: <code className="font-mono font-bold text-lightBlue-700 dark:text-lightBlue-300">admin</code>
+            <p className="text-xs text-blueGray-700">
+              Username: <code className="font-mono font-bold text-lightBlue-700">admin</code>
             </p>
-            <p className="text-xs text-blueGray-700 dark:text-blueGray-300">
-              Password: <code className="font-mono font-bold text-lightBlue-700 dark:text-lightBlue-300">admin123</code>
+            <p className="text-xs text-blueGray-700">
+              Password: <code className="font-mono font-bold text-lightBlue-700">admin123</code>
             </p>
-            <p className="text-[11px] text-blueGray-500 dark:text-blueGray-400 mt-1">
+            <p className="text-[11px] text-blueGray-500 mt-1">
               Hak akses: CRUD barang, kelola staff, pantau semua transaksi.
             </p>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/30">
-            <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200 uppercase mb-1">
+          <div className="p-3.5 rounded-lg border border-emerald-200 bg-emerald-50/60">
+            <p className="text-xs font-bold text-emerald-900 uppercase mb-1">
               Akun Demo Staff
             </p>
-            <p className="text-xs text-blueGray-700 dark:text-blueGray-300">
-              Username: <code className="font-mono font-bold text-emerald-700 dark:text-emerald-300">staff</code>
+            <p className="text-xs text-blueGray-700">
+              Username: <code className="font-mono font-bold text-emerald-700">staff</code>
             </p>
-            <p className="text-xs text-blueGray-700 dark:text-blueGray-300">
-              Password: <code className="font-mono font-bold text-emerald-700 dark:text-emerald-300">staff123</code>
+            <p className="text-xs text-blueGray-700">
+              Password: <code className="font-mono font-bold text-emerald-700">staff123</code>
             </p>
-            <p className="text-[11px] text-blueGray-500 dark:text-blueGray-400 mt-1">
+            <p className="text-[11px] text-blueGray-500 mt-1">
               Hak akses: Pencatatan peminjaman, pengembalian, cek ketersediaan.
             </p>
           </div>
@@ -157,7 +157,7 @@ CODING TALENT CHALLENGE
         {/* Formatted Submission Text Preview */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase text-blueGray-600 dark:text-blueGray-300">
+            <span className="text-xs font-bold uppercase text-blueGray-600">
               Pratinjau Teks Pengumpulan
             </span>
             <button
@@ -174,9 +174,9 @@ CODING TALENT CHALLENGE
           </pre>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-blueGray-200 dark:border-blueGray-700 text-xs text-blueGray-500">
+        <div className="flex items-center justify-between pt-2 border-t border-blueGray-200 text-xs text-blueGray-500">
           <span className="flex items-center gap-1">
-            Host: <strong className="text-blueGray-800 dark:text-blueGray-200">{currentOrigin}</strong>
+            Host: <strong className="text-blueGray-800">{currentOrigin}</strong>
           </span>
           <Button size="sm" variant="ghost" onClick={onClose}>
             Tutup

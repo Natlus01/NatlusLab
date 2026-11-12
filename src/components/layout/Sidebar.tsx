@@ -98,20 +98,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Notus Sidebar Container */}
       <aside
-        className={`fixed md:sticky top-0 md:top-0 z-40 md:z-10 h-screen md:h-auto w-64 bg-white dark:bg-blueGray-800 shadow-xl border-r border-blueGray-200 dark:border-blueGray-700 transition-transform duration-200 ease-in-out md:translate-x-0 flex flex-col justify-between shrink-0 ${
+        className={`fixed md:sticky top-0 z-40 md:z-10 h-screen md:h-auto w-64 bg-white shadow-xl border-r border-blueGray-200 transition-transform duration-200 ease-in-out md:translate-x-0 flex flex-col justify-between shrink-0 ${
           isOpenMobile ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-label="Navigasi Notus"
       >
         <div className="p-6 overflow-y-auto">
           {/* Brand Header (Notus style) */}
-          <div className="flex items-center justify-between pb-4 border-b border-blueGray-200 dark:border-blueGray-700">
+          <div className="flex items-center justify-between pb-4 border-b border-blueGray-200">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded bg-lightBlue-600 text-white flex items-center justify-center shadow">
                 <Monitor className="w-4 h-4" aria-hidden="true" />
               </div>
               <div className="text-left">
-                <span className="text-sm font-bold uppercase tracking-wider text-blueGray-700 dark:text-blueGray-100 block">
+                <span className="text-sm font-bold uppercase tracking-wider text-blueGray-700 block">
                   LabFlow
                 </span>
                 <span className="text-[10px] text-blueGray-400 font-semibold tracking-wide uppercase">
@@ -124,7 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               type="button"
               onClick={onCloseMobile}
               aria-label="Tutup menu navigasi"
-              className="md:hidden p-1.5 text-blueGray-500 hover:text-blueGray-800 dark:hover:text-blueGray-200 rounded cursor-pointer"
+              className="md:hidden p-1.5 text-blueGray-500 hover:text-blueGray-800 rounded cursor-pointer"
             >
               <X className="w-5 h-5" aria-hidden="true" />
             </button>
@@ -132,7 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Section 1: Operasional Lab */}
           <div className="pt-6">
-            <h6 className="md:min-w-full text-blueGray-400 dark:text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-3 no-underline">
+            <h6 className="md:min-w-full text-blueGray-400 text-xs uppercase font-bold block pt-1 pb-3 no-underline">
               Inventaris & Dashboard
             </h6>
             <ul className="md:flex-col md:min-w-full flex flex-col list-none space-y-1">
@@ -145,11 +145,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onClick={() => handleSelect(item.id)}
                       className={`text-xs uppercase py-2.5 px-3 font-bold block w-full text-left rounded transition-colors flex items-center min-h-[44px] cursor-pointer ${
                         isActive
-                          ? 'text-lightBlue-600 dark:text-lightBlue-400 bg-lightBlue-50 dark:bg-lightBlue-950/60 shadow-xs'
-                          : 'text-blueGray-700 dark:text-blueGray-300 hover:text-blueGray-500 hover:bg-blueGray-50 dark:hover:bg-blueGray-700/50'
+                          ? 'text-lightBlue-600 bg-lightBlue-50 shadow-xs'
+                          : 'text-blueGray-700 hover:text-blueGray-500 hover:bg-blueGray-50'
                       }`}
                     >
-                      <span className={isActive ? 'text-lightBlue-600 dark:text-lightBlue-400' : 'text-blueGray-400'}>
+                      <span className={isActive ? 'text-lightBlue-600' : 'text-blueGray-400'}>
                         {item.icon}
                       </span>
                       <span>{item.label}</span>
@@ -160,11 +160,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </ul>
           </div>
 
-          <hr className="my-4 md:min-w-full border-blueGray-200 dark:border-blueGray-700" />
+          <hr className="my-4 md:min-w-full border-blueGray-200" />
 
           {/* Section 2: Transaksi & Sirkulasi */}
           <div>
-            <h6 className="md:min-w-full text-blueGray-400 dark:text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-3 no-underline">
+            <h6 className="md:min-w-full text-blueGray-400 text-xs uppercase font-bold block pt-1 pb-3 no-underline">
               Sirkulasi & Peminjaman
             </h6>
             <ul className="md:flex-col md:min-w-full flex flex-col list-none space-y-1">
@@ -177,11 +177,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       onClick={() => handleSelect(item.id)}
                       className={`text-xs uppercase py-2.5 px-3 font-bold block w-full text-left rounded transition-colors flex items-center min-h-[44px] cursor-pointer ${
                         isActive
-                          ? 'text-lightBlue-600 dark:text-lightBlue-400 bg-lightBlue-50 dark:bg-lightBlue-950/60 shadow-xs'
-                          : 'text-blueGray-700 dark:text-blueGray-300 hover:text-blueGray-500 hover:bg-blueGray-50 dark:hover:bg-blueGray-700/50'
+                          ? 'text-lightBlue-600 bg-lightBlue-50 shadow-xs'
+                          : 'text-blueGray-700 hover:text-blueGray-500 hover:bg-blueGray-50'
                       }`}
                     >
-                      <span className={isActive ? 'text-lightBlue-600 dark:text-lightBlue-400' : 'text-blueGray-400'}>
+                      <span className={isActive ? 'text-lightBlue-600' : 'text-blueGray-400'}>
                         {item.icon}
                       </span>
                       <span>{item.label}</span>
@@ -195,9 +195,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Section 3: Admin Only */}
           {isAdmin && (
             <>
-              <hr className="my-4 md:min-w-full border-blueGray-200 dark:border-blueGray-700" />
+              <hr className="my-4 md:min-w-full border-blueGray-200" />
               <div>
-                <h6 className="md:min-w-full text-blueGray-400 dark:text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-3 no-underline">
+                <h6 className="md:min-w-full text-blueGray-400 text-xs uppercase font-bold block pt-1 pb-3 no-underline">
                   Administrasi Sistem
                 </h6>
                 <ul className="md:flex-col md:min-w-full flex flex-col list-none space-y-1">
@@ -210,11 +210,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           onClick={() => handleSelect(item.id)}
                           className={`text-xs uppercase py-2.5 px-3 font-bold block w-full text-left rounded transition-colors flex items-center min-h-[44px] cursor-pointer ${
                             isActive
-                              ? 'text-lightBlue-600 dark:text-lightBlue-400 bg-lightBlue-50 dark:bg-lightBlue-950/60 shadow-xs'
-                              : 'text-blueGray-700 dark:text-blueGray-300 hover:text-blueGray-500 hover:bg-blueGray-50 dark:hover:bg-blueGray-700/50'
+                              ? 'text-lightBlue-600 bg-lightBlue-50 shadow-xs'
+                              : 'text-blueGray-700 hover:text-blueGray-500 hover:bg-blueGray-50'
                           }`}
                         >
-                          <span className={isActive ? 'text-lightBlue-600 dark:text-lightBlue-400' : 'text-blueGray-400'}>
+                          <span className={isActive ? 'text-lightBlue-600' : 'text-blueGray-400'}>
                             {item.icon}
                           </span>
                           <span>{item.label}</span>
@@ -229,8 +229,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-blueGray-200 dark:border-blueGray-700 bg-blueGray-50 dark:bg-blueGray-900/40">
-          <p className="text-[11px] font-bold text-blueGray-600 dark:text-blueGray-400 uppercase">
+        <div className="p-4 border-t border-blueGray-200 bg-blueGray-50">
+          <p className="text-[11px] font-bold text-blueGray-600 uppercase">
             Laboratorium Komputer
           </p>
           <p className="text-[10px] text-blueGray-400">Coding Talent Challenge</p>

@@ -62,14 +62,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModa
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <div className="p-5 rounded-lg border border-blueGray-200 dark:border-blueGray-700 bg-white dark:bg-blueGray-800 shadow-lg">
+      <div className="p-5 rounded-lg border border-blueGray-200 bg-white shadow-lg">
         <h6 className="text-xs uppercase font-bold text-blueGray-400">
           Pemeliharaan Sistem
         </h6>
-        <h1 className="text-xl font-bold uppercase tracking-tight text-blueGray-800 dark:text-blueGray-100 mt-0.5">
+        <h1 className="text-xl font-bold uppercase tracking-tight text-blueGray-800 mt-0.5">
           Pengaturan & Pencadangan Data
         </h1>
-        <p className="text-xs text-blueGray-500 dark:text-blueGray-400 mt-1">
+        <p className="text-xs text-blueGray-500 mt-1">
           Pencadangan basis data inventaris laboratorium, pemulihan data dari JSON, dan lembar tugas pengumpulan.
         </p>
       </div>
@@ -79,8 +79,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModa
           role="status"
           className={`p-3.5 rounded text-xs font-bold border flex items-center gap-2 ${
             statusMessage.type === 'success'
-              ? 'bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800'
-              : 'bg-red-50 text-red-900 border-red-200 dark:bg-red-950/50 dark:text-red-200 dark:border-red-800'
+              ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+              : 'bg-red-50 text-red-900 border-red-200'
           }`}
         >
           {statusMessage.type === 'success' ? (
@@ -94,12 +94,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModa
 
       {/* Backup and Restore Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 rounded-lg shadow-lg border border-blueGray-100 dark:border-blueGray-700 p-5 space-y-3">
-          <div className="flex items-center gap-2 text-blueGray-800 dark:text-blueGray-100 font-bold uppercase text-xs tracking-wider">
+        <div className="relative flex flex-col min-w-0 break-words bg-white rounded-lg shadow-lg border border-blueGray-100 p-5 space-y-3">
+          <div className="flex items-center gap-2 text-blueGray-800 font-bold uppercase text-xs tracking-wider">
             <Download className="w-4 h-4 text-lightBlue-600" aria-hidden="true" />
             <span>Ekspor & Cadangkan JSON</span>
           </div>
-          <p className="text-xs text-blueGray-500 dark:text-blueGray-400 leading-relaxed">
+          <p className="text-xs text-blueGray-500 leading-relaxed">
             Unduh seluruh data barang, riwayat transaksi, dan akun staff dalam satu berkas JSON cadangan.
           </p>
           <button
@@ -112,12 +112,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModa
           </button>
         </div>
 
-        <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 rounded-lg shadow-lg border border-blueGray-100 dark:border-blueGray-700 p-5 space-y-3">
-          <div className="flex items-center gap-2 text-blueGray-800 dark:text-blueGray-100 font-bold uppercase text-xs tracking-wider">
+        <div className="relative flex flex-col min-w-0 break-words bg-white rounded-lg shadow-lg border border-blueGray-100 p-5 space-y-3">
+          <div className="flex items-center gap-2 text-blueGray-800 font-bold uppercase text-xs tracking-wider">
             <Upload className="w-4 h-4 text-emerald-600" aria-hidden="true" />
             <span>Pulihkan Data dari JSON</span>
           </div>
-          <p className="text-xs text-blueGray-500 dark:text-blueGray-400 leading-relaxed">
+          <p className="text-xs text-blueGray-500 leading-relaxed">
             Muat ulang data laboratorium dari berkas JSON cadangan yang telah diekspor sebelumnya.
           </p>
           <label className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold uppercase text-xs px-4 py-2.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5 w-fit min-h-[36px]">
@@ -134,12 +134,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModa
       </div>
 
       {/* Reset System Card */}
-      <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 rounded-lg shadow-lg border border-red-200 dark:border-red-900/60 p-5 space-y-3">
-        <div className="flex items-center gap-2 text-red-700 dark:text-red-400 font-bold uppercase text-xs tracking-wider">
+      <div className="relative flex flex-col min-w-0 break-words bg-white rounded-lg shadow-lg border border-red-200 p-5 space-y-3">
+        <div className="flex items-center gap-2 text-red-700 font-bold uppercase text-xs tracking-wider">
           <RotateCcw className="w-4 h-4 text-red-600" aria-hidden="true" />
           <span>Atur Ulang ke Data Standar Soal (Pabrik)</span>
         </div>
-        <p className="text-xs text-blueGray-600 dark:text-blueGray-400 leading-relaxed">
+        <p className="text-xs text-blueGray-600 leading-relaxed">
           Mengembalikan inventaris ke 5 data barang awal wajib (BR001 Laptop Lenovo, BR002 Mouse Logitech, BR003 Keyboard Mechanical, BR004 Proyektor Epson, BR005 Monitor LG) serta mereset transaksi.
         </p>
         <button
@@ -153,12 +153,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModa
       </div>
 
       {/* Submission Information Quick Box */}
-      <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-lightBlue-50 dark:bg-lightBlue-950/40 border border-lightBlue-200 dark:border-lightBlue-800 rounded-lg shadow-lg p-5">
+      <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-lightBlue-50 border border-lightBlue-200 rounded-lg shadow-lg p-5">
         <div>
-          <h6 className="text-xs font-bold uppercase tracking-wider text-lightBlue-800 dark:text-lightBlue-300">
+          <h6 className="text-xs font-bold uppercase tracking-wider text-lightBlue-800">
             Format Pengumpulan Tugas (Poin G)
           </h6>
-          <p className="text-xs text-blueGray-600 dark:text-blueGray-400 mt-1">
+          <p className="text-xs text-blueGray-600 mt-1">
             Salin lembar tugas berisi nama, NIM, URL hosting, repositori, dan akun demo.
           </p>
         </div>

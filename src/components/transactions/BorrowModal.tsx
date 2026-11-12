@@ -107,7 +107,7 @@ export const BorrowModal: React.FC<BorrowModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorMessage && (
-          <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 rounded-lg text-xs text-rose-800 dark:text-rose-200">
+          <div className="p-3 bg-red-50 border border-red-200 rounded text-xs text-red-800 font-bold">
             {errorMessage}
           </div>
         )}
@@ -122,7 +122,7 @@ export const BorrowModal: React.FC<BorrowModalProps> = ({
         />
 
         {availableItems.length === 0 ? (
-          <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-lg text-xs text-amber-900 dark:text-amber-200">
+          <div className="p-3 bg-orange-50 border border-orange-200 rounded text-xs text-orange-900 font-bold">
             Saat ini tidak ada barang yang tersedia untuk dipinjam (stok 0).
           </div>
         ) : (
@@ -171,7 +171,7 @@ export const BorrowModal: React.FC<BorrowModalProps> = ({
           placeholder="Contoh: Praktikum Jaringan Komputer di Lab 2"
         />
 
-        <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 text-xs text-slate-500">
+        <div className="p-3 rounded bg-blueGray-50 border border-blueGray-200 text-xs text-blueGray-500">
           <p>
             Petugas pemroses: <strong>{currentUser.name}</strong> ({currentUser.role})
           </p>
@@ -180,7 +180,7 @@ export const BorrowModal: React.FC<BorrowModalProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t border-blueGray-200">
           <Button variant="outline" type="button" onClick={onClose}>
             Batal
           </Button>

@@ -62,12 +62,12 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         ref={modalRef}
-        className={`w-full ${maxWidthClasses[maxWidth]} bg-white dark:bg-blueGray-800 border border-blueGray-200 dark:border-blueGray-700 rounded-lg shadow-2xl overflow-hidden my-8`}
+        className={`w-full ${maxWidthClasses[maxWidth]} bg-white border border-blueGray-200 rounded-lg shadow-2xl overflow-hidden my-8`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-blueGray-200 dark:border-blueGray-700 bg-blueGray-50 dark:bg-blueGray-800">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-blueGray-200 bg-blueGray-50">
           <div>
-            <h3 id="modal-title" className="text-sm font-bold uppercase text-blueGray-800 dark:text-blueGray-100 tracking-wider">
+            <h3 id="modal-title" className="text-sm font-bold uppercase text-blueGray-800 tracking-wider">
               {title}
             </h3>
             {description && (
@@ -80,7 +80,7 @@ export const Modal: React.FC<ModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Tutup dialog"
-            className="p-1.5 text-blueGray-400 hover:text-blueGray-700 dark:hover:text-blueGray-200 hover:bg-blueGray-100 dark:hover:bg-blueGray-700 rounded transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-1.5 text-blueGray-400 hover:text-blueGray-700 hover:bg-blueGray-100 rounded transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             <X className="w-5 h-5" aria-hidden="true" />
           </button>

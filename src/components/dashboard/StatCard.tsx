@@ -17,7 +17,6 @@ export const StatCard: React.FC<StatCardProps> = ({
   description,
   variant = 'lightBlue',
 }) => {
-  // Notus circular icon background colors
   const iconBackgrounds = {
     red: 'bg-red-500',
     orange: 'bg-orange-500',
@@ -26,7 +25,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   };
 
   return (
-    <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 rounded-lg shadow-lg border border-blueGray-100 dark:border-blueGray-700 p-4 transition-all hover:shadow-xl">
+    <div className="relative flex flex-col min-w-0 break-words bg-white rounded-lg shadow-lg border border-blueGray-100 p-4 transition-all hover:shadow-xl">
       <div className="flex-auto p-1">
         <div className="flex flex-wrap items-center">
           <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
@@ -34,7 +33,7 @@ export const StatCard: React.FC<StatCardProps> = ({
               {label}
             </h5>
             <div className="flex items-baseline gap-1 mt-1">
-              <span className="font-bold text-2xl text-blueGray-700 dark:text-blueGray-100 tabular-nums">
+              <span className="font-bold text-2xl text-blueGray-700 tabular-nums">
                 {value}
               </span>
               {unit && (
@@ -54,7 +53,7 @@ export const StatCard: React.FC<StatCardProps> = ({
           </div>
         </div>
         {description && (
-          <p className="text-xs text-blueGray-400 dark:text-blueGray-400 mt-4 pt-2 border-t border-blueGray-100 dark:border-blueGray-700/60 flex items-center">
+          <p className="text-xs text-blueGray-400 mt-4 pt-2 border-t border-blueGray-100 flex items-center">
             <span className="whitespace-nowrap font-medium">{description}</span>
           </p>
         )}

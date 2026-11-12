@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
 import { Input } from '../common/Input';
-import { Monitor, Sun, Moon, Shield, ArrowRight } from 'lucide-react';
+import { Monitor, Shield, ArrowRight } from 'lucide-react';
 
 interface LoginPageProps {
   onOpenSubmissionModal: () => void;
@@ -10,7 +9,6 @@ interface LoginPageProps {
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) => {
   const { login } = useAuth();
-  const { theme, toggleTheme } = useTheme();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -38,7 +36,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) =
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-blueGray-800 text-blueGray-100 transition-colors">
+    <div className="min-h-screen flex flex-col justify-between bg-blueGray-800 text-blueGray-100">
       {/* Notus Auth Top Navbar */}
       <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-4 py-3">
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
@@ -59,19 +57,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) =
             >
               Info Pengumpulan & Demo
             </button>
-
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label={theme === 'dark' ? 'Ganti ke tema terang' : 'Ganti ke tema gelap'}
-              className="p-2 text-blueGray-300 hover:text-white rounded cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400" aria-hidden="true" />
-              ) : (
-                <Moon className="w-4 h-4 text-blueGray-300" aria-hidden="true" />
-              )}
-            </button>
           </div>
         </div>
       </nav>
@@ -79,11 +64,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) =
       {/* Main Notus Centered Auth Card */}
       <main className="container mx-auto px-4 h-full flex-1 flex items-center justify-center pt-20 pb-12">
         <div className="w-full lg:w-4/12 px-4">
-          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-2xl rounded-lg bg-blueGray-100 dark:bg-blueGray-900 border border-blueGray-700">
+          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-2xl rounded-lg bg-blueGray-100 border border-blueGray-700">
             {/* Card Header (Notus Quick OAuth style for Dosen / Examiner) */}
-            <div className="rounded-t mb-0 px-6 py-6 border-b border-blueGray-200 dark:border-blueGray-700">
+            <div className="rounded-t mb-0 px-6 py-6 border-b border-blueGray-200">
               <div className="text-center mb-3">
-                <h6 className="text-blueGray-500 dark:text-blueGray-400 text-xs font-bold uppercase tracking-wider">
+                <h6 className="text-blueGray-500 text-xs font-bold uppercase tracking-wider">
                   Pengujian Akun Cepat (Coding Talent Challenge)
                 </h6>
               </div>
@@ -119,7 +104,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) =
               {errorMessage && (
                 <div
                   role="alert"
-                  className="mb-4 p-3 bg-red-100 text-red-900 border border-red-300 dark:bg-red-950/60 dark:text-red-200 dark:border-red-800 rounded text-xs font-semibold"
+                  className="mb-4 p-3 bg-red-100 text-red-900 border border-red-300 rounded text-xs font-semibold"
                 >
                   {errorMessage}
                 </div>

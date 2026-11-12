@@ -39,7 +39,7 @@ export const Layout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-blueGray-100 dark:bg-blueGray-900 text-blueGray-800 dark:text-blueGray-100 flex flex-col md:flex-row transition-colors">
+    <div className="min-h-screen bg-blueGray-100 text-blueGray-800 flex flex-col md:flex-row">
       {/* Notus Sidebar */}
       <Sidebar
         activeTab={activeTab}
@@ -63,7 +63,7 @@ export const Layout: React.FC<LayoutProps> = ({
         </main>
 
         {/* Notus Admin Footer */}
-        <footer className="block py-4 border-t border-blueGray-200 dark:border-blueGray-800 bg-white dark:bg-blueGray-800/80">
+        <footer className="block py-4 border-t border-blueGray-200 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap items-center md:justify-between justify-center text-xs text-blueGray-500">
               <div className="w-full md:w-6/12 text-center md:text-left">

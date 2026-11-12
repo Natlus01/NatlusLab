@@ -15,12 +15,12 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
   const recent = transactions.slice(0, 5);
 
   return (
-    <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 w-full shadow-lg rounded-lg border border-blueGray-100 dark:border-blueGray-700">
+    <div className="relative flex flex-col min-w-0 break-words bg-white w-full shadow-lg rounded-lg border border-blueGray-100">
       {/* Notus Card Header */}
-      <div className="rounded-t mb-0 px-5 py-4 border-b border-solid border-blueGray-100 dark:border-blueGray-700 flex items-center justify-between">
+      <div className="rounded-t mb-0 px-5 py-4 border-b border-solid border-blueGray-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-blueGray-400" aria-hidden="true" />
-          <h3 className="font-bold text-sm uppercase text-blueGray-700 dark:text-blueGray-100 tracking-wider">
+          <h3 className="font-bold text-sm uppercase text-blueGray-700 tracking-wider">
             Aktivitas Transaksi Terbaru
           </h3>
         </div>
@@ -33,7 +33,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
         </button>
       </div>
 
-      <div className="p-4 divide-y divide-blueGray-100 dark:divide-blueGray-700">
+      <div className="p-4 divide-y divide-blueGray-100">
         {recent.length === 0 ? (
           <div className="py-8 text-center text-xs text-blueGray-400">
             Belum ada aktivitas transaksi yang tercatat.
@@ -57,7 +57,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-bold text-blueGray-800 dark:text-blueGray-100 truncate">
+                  <p className="text-xs font-bold text-blueGray-800 truncate">
                     {trx.borrowerName}
                   </p>
                   <p className="text-[11px] text-blueGray-400 truncate mt-0.5">

@@ -24,7 +24,7 @@ export const Input: React.FC<InputProps> = ({
     <div className="w-full">
       <label
         htmlFor={inputId}
-        className="block uppercase text-blueGray-600 dark:text-blueGray-300 text-xs font-bold mb-1.5"
+        className="block uppercase text-blueGray-600 text-xs font-bold mb-1.5"
       >
         {label}
         {props.required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
@@ -34,11 +34,11 @@ export const Input: React.FC<InputProps> = ({
         disabled={disabled}
         aria-invalid={!!error}
         aria-describedby={error ? errorId : helperText ? helperId : undefined}
-        className={`w-full min-h-[44px] px-3.5 py-2.5 text-sm rounded border bg-white dark:bg-blueGray-800 text-blueGray-700 dark:text-blueGray-100 placeholder:text-blueGray-400 shadow-xs transition-all focus:outline-none focus:ring-2 focus:ring-lightBlue-500 ${
+        className={`w-full min-h-[44px] px-3.5 py-2.5 text-sm rounded border bg-white text-blueGray-700 placeholder:text-blueGray-300 shadow-xs transition-all focus:outline-none focus:ring-2 focus:ring-lightBlue-500 ${
           error
             ? 'border-red-500 focus:ring-red-500'
-            : 'border-blueGray-300 dark:border-blueGray-600'
-        } ${disabled ? 'bg-blueGray-100 dark:bg-blueGray-900 text-blueGray-400 cursor-not-allowed' : ''} ${className}`}
+            : 'border-blueGray-300'
+        } ${disabled ? 'bg-blueGray-100 text-blueGray-400 cursor-not-allowed' : ''} ${className}`}
         {...props}
       />
       {error && (

@@ -84,7 +84,7 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorMessage && (
-          <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 rounded-lg text-xs text-rose-800 dark:text-rose-200">
+          <div className="p-3 bg-red-50 border border-red-200 rounded text-xs text-red-800 font-bold">
             {errorMessage}
           </div>
         )}
@@ -115,21 +115,21 @@ export const UserFormModal: React.FC<UserFormModalProps> = ({
           required
         />
 
-        <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700">
+        <div className="flex items-center gap-3 p-3 bg-blueGray-50 rounded border border-blueGray-200">
           <input
             id="user-is-active"
             type="checkbox"
             checked={isActive}
             onChange={(e) => setIsActive(e.target.checked)}
-            className="w-4 h-4 text-teal-600 rounded-sm focus:ring-teal-500 cursor-pointer"
+            className="w-4 h-4 text-lightBlue-600 rounded focus:ring-lightBlue-500 cursor-pointer"
           />
-          <label htmlFor="user-is-active" className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer select-none">
-            <strong className="block text-slate-900 dark:text-slate-100">Akun Aktif</strong>
+          <label htmlFor="user-is-active" className="text-xs text-blueGray-700 cursor-pointer select-none">
+            <strong className="block text-blueGray-800">Akun Aktif</strong>
             Staff dapat login dan mengelola operasional jika status akun aktif.
           </label>
         </div>
 
-        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t border-blueGray-200">
           <Button variant="outline" type="button" onClick={onClose}>
             Batal
           </Button>

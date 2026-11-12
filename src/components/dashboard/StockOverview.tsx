@@ -21,12 +21,12 @@ export const StockOverview: React.FC<StockOverviewProps> = ({ items }) => {
   });
 
   return (
-    <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 w-full shadow-lg rounded-lg border border-blueGray-100 dark:border-blueGray-700">
+    <div className="relative flex flex-col min-w-0 break-words bg-white w-full shadow-lg rounded-lg border border-blueGray-100">
       {/* Notus Card Header */}
-      <div className="rounded-t mb-0 px-5 py-4 border-b border-solid border-blueGray-100 dark:border-blueGray-700 flex items-center justify-between">
+      <div className="rounded-t mb-0 px-5 py-4 border-b border-solid border-blueGray-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <AlertCircle className="w-4 h-4 text-blueGray-400" aria-hidden="true" />
-          <h3 className="font-bold text-sm uppercase text-blueGray-700 dark:text-blueGray-100 tracking-wider">
+          <h3 className="font-bold text-sm uppercase text-blueGray-700 tracking-wider">
             Ketersediaan & Stok Kritis
           </h3>
         </div>
@@ -42,7 +42,7 @@ export const StockOverview: React.FC<StockOverviewProps> = ({ items }) => {
             Peralatan dengan Stok Kritis (&le; 2 unit)
           </h6>
           {lowStockItems.length === 0 ? (
-            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300">
+            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded flex items-center gap-2 text-xs text-emerald-800">
               <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" aria-hidden="true" />
               <span>Semua peralatan laboratorium memiliki ketersediaan yang mencukupi.</span>
             </div>
@@ -51,10 +51,10 @@ export const StockOverview: React.FC<StockOverviewProps> = ({ items }) => {
               {lowStockItems.slice(0, 4).map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-2.5 rounded bg-blueGray-50 dark:bg-blueGray-700/60 border border-blueGray-100 dark:border-blueGray-600 text-xs"
+                  className="flex items-center justify-between p-2.5 rounded bg-blueGray-50 border border-blueGray-100 text-xs"
                 >
                   <div className="min-w-0 pr-2">
-                    <span className="font-bold text-blueGray-800 dark:text-blueGray-100 block truncate">
+                    <span className="font-bold text-blueGray-800 block truncate">
                       {item.name}
                     </span>
                     <span className="text-[10px] text-blueGray-400 font-mono">
@@ -71,7 +71,7 @@ export const StockOverview: React.FC<StockOverviewProps> = ({ items }) => {
         </div>
 
         {/* Category Breakdown */}
-        <div className="pt-3 border-t border-blueGray-100 dark:border-blueGray-700">
+        <div className="pt-3 border-t border-blueGray-100">
           <h6 className="text-[11px] font-bold uppercase text-blueGray-400 tracking-wider mb-2.5">
             Sebaran Berdasarkan Kategori
           </h6>
@@ -79,14 +79,14 @@ export const StockOverview: React.FC<StockOverviewProps> = ({ items }) => {
             {Object.entries(categoryCounts).slice(0, 4).map(([category, count]) => (
               <div
                 key={category}
-                className="p-2.5 rounded bg-blueGray-50/70 dark:bg-blueGray-700/40 border border-blueGray-100 dark:border-blueGray-600"
+                className="p-2.5 rounded bg-blueGray-50/70 border border-blueGray-100"
               >
-                <span className="text-[11px] text-blueGray-500 dark:text-blueGray-300 block truncate font-bold">
+                <span className="text-[11px] text-blueGray-500 block truncate font-bold">
                   {category}
                 </span>
                 <div className="flex items-baseline justify-between mt-1">
                   <span className="text-[11px] text-blueGray-400">{count.totalItems} jenis</span>
-                  <span className="text-xs font-bold text-lightBlue-600 dark:text-lightBlue-400 tabular-nums">
+                  <span className="text-xs font-bold text-lightBlue-600 tabular-nums">
                     {count.availableStock} siap
                   </span>
                 </div>
