@@ -164,9 +164,6 @@ git clone https://github.com/Natlus01/NatlusLab.git /var/www/natluslab
 
 # 3. Masuk ke direktori proyek
 cd /var/www/natluslab
-
-# 4. Pasang berkas environment contoh
-cp .env.example .env
 ```
 
 ---
@@ -395,7 +392,6 @@ NatlusLab/
 │   ├── App.tsx             # Root router & penanganan state utama
 │   ├── index.css           # Styling Tailwind CSS
 │   └── main.tsx            # Entry point aplikasi React
-├── .env.example            # Contoh variabel lingkungan server & PostgreSQL
 ├── .gitignore              # Daftar berkas terabaikan dari Git
 ├── index.html              # Shell HTML aplikasi
 ├── package.json            # Daftar dependensi & script proyek
