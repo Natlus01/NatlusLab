@@ -2,9 +2,10 @@
 
 Sistem informasi pengelolaan inventaris dan transaksi peminjaman alat/perangkat laboratorium komputer secara digital berbasis web mandiri (*self-hosted*). Dirancang dengan arsitektur modern, cepat, responsif, dan siap produksi.
 
-- **Domain Produksi:** [https://lab.natlus.my.id](https://lab.natlus.my.id)
-- **Repository GitHub:** [https://github.com/Natlus01/kasir-natlus](https://github.com/Natlus01/kasir-natlus)
-- **Arsitektur:** React 18, TypeScript, Tailwind CSS, Vite, Nginx Web Server di Ubuntu Server, SSL Let's Encrypt (HTTPS).
+- **Frontend:** React 18, TypeScript, Tailwind CSS, Vite
+- **Database:** PostgreSQL (Relational Database Management System)
+- **Web Server & Reverse Proxy:** Nginx di Ubuntu Server
+- **Keamanan & SSL:** Let's Encrypt (Certbot HTTPS)
 
 ---
 
@@ -32,7 +33,7 @@ Sistem memiliki dua tingkat hak akses (Role-Based Access Control) terproteksi:
 ### B. Dashboard Analitik & Monitoring
 - Metrik akumulasi: total jenis barang terdaftar, unit siap dipinjam, unit sedang dipinjam secara riil, dan total transaksi sirkulasi.
 - Pemantauan status ketersediaan barang berstatus kritis/menipis secara otomatis.
-- Ringkasan 5 aktivitas transaksi peminjaman dan pengembalian paling baru.
+- Ringkasan aktivitas transaksi peminjaman dan pengembalian paling baru.
 
 ### C. Manajemen Data Inventaris (Admin)
 - Penambahan dan pembaruan data barang (kode unik, nama, kategori, stok unit).
@@ -86,8 +87,8 @@ Sistem memiliki dua tingkat hak akses (Role-Based Access Control) terproteksi:
 ### Langkah Pengerjaan
 ```bash
 # 1. Clone repositori ke komputer lokal
-git clone https://github.com/Natlus01/kasir-natlus.git
-cd kasir-natlus
+git clone https://github.com/Natlus01/NatlusLab.git
+cd NatlusLab
 
 # 2. Pasang seluruh dependensi proyek
 npm install
@@ -101,12 +102,12 @@ npm run build
 
 ---
 
-## 5. Panduan Deployment Lengkap ke Ubuntu Server + Nginx
+## 5. Panduan Deployment Ubuntu Server + Nginx + PostgreSQL
 
-Panduan berikut digunakan untuk menerbitkan aplikasi ke subdomain **`lab.natlus.my.id`** di server mandiri Ubuntu menggunakan Nginx dan sertifikat SSL gratis Let's Encrypt.
+Panduan berikut digunakan untuk menerbitkan aplikasi ke subdomain **`lab.natlus.my.id`** di server mandiri Ubuntu menggunakan Nginx, database PostgreSQL, dan sertifikat SSL gratis Let's Encrypt.
 
 ### Tahap 1: Konfigurasi DNS di Pengelola Domain (`natlus.my.id`)
-Buka panel DNS tempat Anda membeli domain `natlus.my.id` (misalnya Cloudflare, Niagahoster, DomaiNesia, IDCloudHost, dll.), lalu tambahkan DNS Record berikut:
+Buka panel DNS pengelola domain Anda, lalu tambahkan DNS Record berikut:
 
 | Type | Name / Host | Target / Value | TTL | Keterangan |
 | :---: | :---: | :---: | :---: | :--- |
@@ -123,7 +124,7 @@ Hubungi server VPS Anda melalui terminal SSH:
 ssh user@IP_PUBLIC_UBUNTU_ANDA
 ```
 
-Perbarui paket sistem dan pasang Nginx, Git, Node.js LTS, dan Certbot:
+Perbarui paket sistem dan pasang Nginx, Git, Node.js LTS, Certbot, serta PostgreSQL:
 ```bash
 # 1. Update repository & upgrade paket
 sudo apt update && sudo apt upgrade -y
@@ -137,17 +138,120 @@ sudo apt install nodejs -y
 
 # 4. Pasang Certbot & plugin Nginx untuk SSL gratis Let's Encrypt
 sudo apt install certbot python3-certbot-nginx -y
+
+# 5. Pasang Database PostgreSQL & modul pendukung
+sudo apt install postgresql postgresql-contrib -y
 ```
 
-Pastikan Node.js dan Nginx telah terpasang dengan baik:
+Pastikan layanan PostgreSQL berjalan aktif:
 ```bash
-node -v   # Menampilkan versi Node (misal v20.x)
-nginx -v  # Menampilkan versi Nginx
+sudo systemctl status postgresql
 ```
 
 ---
 
-### Tahap 3: Unduh Proyek dan Build Berkas Produksi di Server
+### Tahap 3: Konfigurasi & Inisialisasi Database PostgreSQL
+
+1. **Masuk ke prompt PostgreSQL:**
+   ```bash
+   sudo -u postgres psql
+   ```
+
+2. **Buat Database dan User Khusus:**
+   ```sql
+   -- Buat database
+   CREATE DATABASE natluslab_db;
+
+   -- Buat user dengan password aman (ganti 'password_kuat_anda')
+   CREATE USER natluslab_user WITH ENCRYPTED PASSWORD 'password_kuat_anda';
+
+   -- Berikan hak akses penuh ke user
+   GRANT ALL PRIVILEGES ON DATABASE natluslab_db TO natluslab_user;
+
+   -- Hubungkan ke database dan atur schema
+   \c natluslab_db
+   GRANT ALL ON SCHEMA public TO natluslab_user;
+   ```
+
+3. **Skema Tabel PostgreSQL (DDL):**
+   Jalankan query DDL berikut di dalam database `natluslab_db`:
+   ```sql
+   -- 1. Tabel Pengguna (Users)
+   CREATE TABLE IF NOT EXISTS users (
+       id VARCHAR(64) PRIMARY KEY,
+       username VARCHAR(50) UNIQUE NOT NULL,
+       password VARCHAR(255) NOT NULL,
+       name VARCHAR(100) NOT NULL,
+       role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'STAFF')),
+       is_active BOOLEAN DEFAULT TRUE,
+       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+   );
+
+   -- 2. Tabel Inventaris Barang (Items)
+   CREATE TABLE IF NOT EXISTS items (
+       id VARCHAR(64) PRIMARY KEY,
+       code VARCHAR(50) UNIQUE NOT NULL,
+       name VARCHAR(150) NOT NULL,
+       category VARCHAR(100) NOT NULL,
+       stock INTEGER NOT NULL CHECK (stock >= 0),
+       total_stock INTEGER NOT NULL CHECK (total_stock >= 0),
+       borrowed_count INTEGER DEFAULT 0 CHECK (borrowed_count >= 0),
+       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+   );
+
+   -- 3. Tabel Transaksi Sirkulasi (Transactions)
+   CREATE TABLE IF NOT EXISTS transactions (
+       id VARCHAR(64) PRIMARY KEY,
+       transaction_code VARCHAR(50) UNIQUE NOT NULL,
+       borrower_name VARCHAR(100) NOT NULL,
+       item_id VARCHAR(64) NOT NULL REFERENCES items(id) ON DELETE RESTRICT,
+       item_code VARCHAR(50) NOT NULL,
+       item_name VARCHAR(150) NOT NULL,
+       quantity INTEGER NOT NULL CHECK (quantity > 0),
+       borrow_date VARCHAR(50) NOT NULL,
+       return_date VARCHAR(50),
+       status VARCHAR(20) NOT NULL CHECK (status IN ('DIPINJAM', 'SELESAI')),
+       processed_by_user_id VARCHAR(64) NOT NULL REFERENCES users(id),
+       processed_by_user_name VARCHAR(100) NOT NULL,
+       returned_by_user_id VARCHAR(64) REFERENCES users(id),
+       returned_by_user_name VARCHAR(100),
+       notes TEXT,
+       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+   );
+
+   -- Indeks untuk optimasi pencarian
+   CREATE INDEX IF NOT EXISTS idx_items_code ON items(code);
+   CREATE INDEX IF NOT EXISTS idx_transactions_status ON transactions(status);
+   ```
+
+4. **Data Awal (Seed Data SQL):**
+   ```sql
+   -- Masukkan user bawaan
+   INSERT INTO users (id, username, password, name, role, is_active) VALUES
+   ('user-1', 'admin', 'admin123', 'Administrator Utama', 'ADMIN', true),
+   ('user-2', 'staff', 'staff123', 'Staf Laboratorium', 'STAFF', true)
+   ON CONFLICT (username) DO NOTHING;
+
+   -- Masukkan barang inventaris awal
+   INSERT INTO items (id, code, name, category, stock, total_stock, borrowed_count) VALUES
+   ('item-1', 'BR001', 'Laptop Lenovo', 'Laptop & Komputer', 5, 5, 0),
+   ('item-2', 'BR002', 'Mouse Logitech', 'Aksesori & Periferal', 10, 10, 0),
+   ('item-3', 'BR003', 'Keyboard Mechanical', 'Aksesori & Periferal', 8, 8, 0),
+   ('item-4', 'BR004', 'Proyektor Epson', 'Audio Visual & Presentasi', 3, 3, 0),
+   ('item-5', 'BR005', 'Monitor LG', 'Display & Monitor', 6, 6, 0),
+   ('item-6', 'BR006', 'Router MikroTik RB750Gr3', 'Perangkat Jaringan', 4, 4, 0),
+   ('item-7', 'BR007', 'Switch Cisco Catalyst 2960', 'Perangkat Jaringan', 2, 2, 0),
+   ('item-8', 'BR008', 'Crimping Tool & LAN Tester', 'Peralatan & Perkakas Lab', 5, 5, 0),
+   ('item-9', 'BR009', 'Webcam Logitech C920 Pro', 'Audio Visual & Presentasi', 6, 6, 0),
+   ('item-10', 'BR010', 'Toolkit Obeng Presisi', 'Peralatan & Perkakas Lab', 7, 7, 0)
+   ON CONFLICT (code) DO NOTHING;
+   ```
+   Ketik `\q` untuk keluar dari psql.
+
+---
+
+### Tahap 4: Unduh Proyek dan Build Berkas Produksi di Server
 Siapkan direktori aplikasi pada `/var/www/natluslab`:
 ```bash
 # 1. Buat folder direktori dan atur kepemilikan user
@@ -155,7 +259,7 @@ sudo mkdir -p /var/www/natluslab
 sudo chown -R $USER:$USER /var/www/natluslab
 
 # 2. Clone repositori dari GitHub
-git clone https://github.com/Natlus01/kasir-natlus.git /var/www/natluslab
+git clone https://github.com/Natlus01/NatlusLab.git /var/www/natluslab
 
 # 3. Masuk ke direktori dan pasang dependensi
 cd /var/www/natluslab
@@ -168,7 +272,7 @@ Setelah proses build selesai, berkas web siap saji akan berada di folder `/var/w
 
 ---
 
-### Tahap 4: Konfigurasi Virtual Host Nginx
+### Tahap 5: Konfigurasi Virtual Host Nginx
 Buat berkas konfigurasi Nginx baru untuk subdomain:
 ```bash
 sudo nano /etc/nginx/sites-available/lab.natlus.my.id
@@ -224,7 +328,7 @@ sudo systemctl reload nginx
 
 ---
 
-### Tahap 5: Pasang Sertifikat SSL HTTPS Gratis (Certbot Let's Encrypt)
+### Tahap 6: Pasang Sertifikat SSL HTTPS Gratis (Certbot Let's Encrypt)
 Jalankan perintah Certbot untuk memasang sertifikat keamanan SSL otomatis pada domain Anda:
 ```bash
 sudo certbot --nginx -d lab.natlus.my.id
@@ -232,7 +336,7 @@ sudo certbot --nginx -d lab.natlus.my.id
 
 - Masukkan alamat email Anda untuk pemberitahuan pembaruan keamanan.
 - Setujui syarat dan ketentuan (*Terms of Service*).
-- Pilih opsi **Redirect HTTP to HTTPS** (jika ditanyakan) agar seluruh lalu lintas HTTP secara otomatis diarahkan ke HTTPS.
+- Pilih opsi **Redirect HTTP to HTTPS** agar seluruh lalu lintas HTTP secara otomatis diarahkan ke HTTPS.
 
 Uji coba mekanisme perpanjangan otomatis (*auto-renewal*):
 ```bash
@@ -241,7 +345,7 @@ sudo certbot renew --dry-run
 
 ---
 
-### Tahap 6: Pengaturan Firewall (UFW)
+### Tahap 7: Pengaturan Firewall (UFW)
 Pastikan port SSH dan Web (HTTP & HTTPS) diizinkan:
 ```bash
 sudo ufw allow OpenSSH
@@ -250,13 +354,12 @@ sudo ufw enable
 sudo ufw status
 ```
 
-Sekarang Anda dapat membuka aplikasi secara langsung melalui peramban web di:
-**[https://lab.natlus.my.id](https://lab.natlus.my.id)**
-
 ---
 
-### Tahap 7: Alur Pembaruan Aplikasi (Jika Ada Perubahan Kode)
-Jika di masa depan Anda melakukan pembaruan kode dan mendorong (*push*) perubahan ke GitHub, Anda hanya perlu menjalankan perintah berikut di terminal server:
+### Tahap 8: Prosedur Pembaruan & Pencadangan Data
+
+#### 1. Alur Pembaruan Kode Aplikasi
+Jika ada pembaruan kode di GitHub:
 ```bash
 cd /var/www/natluslab
 git pull origin main
@@ -265,12 +368,22 @@ npm run build
 sudo systemctl reload nginx
 ```
 
+#### 2. Pencadangan Basis Data PostgreSQL
+Untuk membuat backup database secara berkala:
+```bash
+# Backup ke file .sql
+pg_dump -U natluslab_user -d natluslab_db -h localhost > backup_$(date +%F).sql
+
+# Restore dari file .sql jika diperlukan
+psql -U natluslab_user -d natluslab_db -h localhost < backup_file.sql
+```
+
 ---
 
 ## 6. Struktur Direktori Proyek
 
 ```text
-kasir-natlus/
+NatlusLab/
 ├── dist/                   # Hasil kompilasi statis produksi (yang dilayani oleh Nginx)
 ├── src/
 │   ├── components/         # Komponen UI modular
