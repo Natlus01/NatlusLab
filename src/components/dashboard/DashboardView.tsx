@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import { StatCard } from './StatCard';
 import { RecentActivity } from './RecentActivity';
 import { StockOverview } from './StockOverview';
-import { Button } from '../common/Button';
 import {
   Package,
   CheckCircle2,
@@ -32,7 +31,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 }) => {
   const { currentUser, isAdmin } = useAuth();
 
-  // Metrics calculations (Section C.2)
   const totalItemTypes = items.length;
   const totalUnitsOwned = items.reduce((acc, item) => acc + item.totalStock, 0);
   const totalAvailableStock = items.reduce((acc, item) => acc + item.stock, 0);
@@ -41,81 +39,81 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Welcome & Role greeting banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-teal-950 text-white shadow-sm">
-        <div>
-          <span className="text-xs uppercase font-semibold tracking-wider text-teal-400">
-            {isAdmin ? 'Dashboard Pengelola Utama' : 'Dashboard Operasional Petugas'}
-          </span>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white mt-1">
-            Selamat Datang, {currentUser?.name}
-          </h1>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl">
-            Sistem Pemantauan Inventaris & Peminjaman Peralatan Laboratorium Komputer.
-          </p>
-        </div>
+      {/* Notus Header Banner & Stats (HeaderStats.js style) */}
+      <div className="relative bg-blueGray-800 dark:bg-slate-900 rounded-xl p-6 sm:p-8 shadow-lg text-white">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-blueGray-700">
+          <div>
+            <h6 className="text-xs uppercase font-bold text-lightBlue-400 tracking-wider">
+              {isAdmin ? 'Pengelola Utama Laboratorium' : 'Petugas Operasional'}
+            </h6>
+            <h1 className="text-xl sm:text-2xl font-bold uppercase tracking-tight text-white mt-1">
+              Selamat Datang, {currentUser?.name}
+            </h1>
+            <p className="text-xs text-blueGray-300 mt-1">
+              Pemantauan sirkulasi aset laboratorium, ketersediaan unit, dan status peminjaman.
+            </p>
+          </div>
 
-        <div className="flex items-center gap-2.5">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onOpenBorrowModal}
-            icon={<ArrowUpRight className="w-4 h-4 text-teal-600 dark:text-teal-400" />}
-            className="bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs"
-          >
-            Pinjam Barang
-          </Button>
-          {isAdmin && (
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={onOpenAddItemModal}
-              icon={<Plus className="w-4 h-4" />}
-              className="text-xs"
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={onOpenBorrowModal}
+              className="bg-white text-blueGray-800 active:bg-blueGray-100 font-bold uppercase text-xs px-4 py-2.5 rounded shadow hover:shadow-md outline-none focus:outline-none transition-all cursor-pointer flex items-center gap-1.5"
             >
-              Tambah Barang
-            </Button>
-          )}
+              <ArrowUpRight className="w-3.5 h-3.5 text-lightBlue-600" aria-hidden="true" />
+              <span>Pinjam Barang</span>
+            </button>
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={onOpenAddItemModal}
+                className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white active:bg-lightBlue-700 font-bold uppercase text-xs px-4 py-2.5 rounded shadow hover:shadow-md outline-none focus:outline-none transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <Plus className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Tambah Barang</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Notus 4 Stat Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
+          <StatCard
+            label="Total Jenis Barang"
+            value={totalItemTypes}
+            unit="jenis"
+            icon={<Package className="w-6 h-6" />}
+            description={`${totalUnitsOwned} total unit fisik`}
+            variant="lightBlue"
+          />
+          <StatCard
+            label="Barang Tersedia"
+            value={totalAvailableStock}
+            unit="unit"
+            icon={<CheckCircle2 className="w-6 h-6" />}
+            description="Siap dipinjamkan di lab"
+            variant="emerald"
+          />
+          <StatCard
+            label="Barang Dipinjam"
+            value={totalBorrowedStock}
+            unit="unit"
+            icon={<Clock className="w-6 h-6" />}
+            description="Sedang dalam sirkulasi"
+            variant="orange"
+          />
+          <StatCard
+            label="Total Transaksi"
+            value={totalTransactionsCount}
+            unit="catatan"
+            icon={<Layers className="w-6 h-6" />}
+            description="Akumulasi riwayat sirkulasi"
+            variant="red"
+          />
         </div>
       </div>
 
-      {/* 4 Stat Cards required by Section C.2 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          label="Total Aset Barang"
-          value={totalItemTypes}
-          unit="jenis"
-          icon={<Package className="w-5 h-5" />}
-          description={`Total fisik: ${totalUnitsOwned} unit terdaftar`}
-          variant="teal"
-        />
-        <StatCard
-          label="Barang Tersedia"
-          value={totalAvailableStock}
-          unit="unit"
-          icon={<CheckCircle2 className="w-5 h-5" />}
-          description="Siap digunakan di laboratorium"
-          variant="emerald"
-        />
-        <StatCard
-          label="Barang Dipinjam"
-          value={totalBorrowedStock}
-          unit="unit"
-          icon={<Clock className="w-5 h-5" />}
-          description="Sedang dalam status sirkulasi"
-          variant="amber"
-        />
-        <StatCard
-          label="Total Transaksi"
-          value={totalTransactionsCount}
-          unit="catatan"
-          icon={<Layers className="w-5 h-5" />}
-          description="Akumulasi riwayat peminjaman"
-          variant="sky"
-        />
-      </div>
-
-      {/* Two columns: Recent Activities + Stock Availability */}
+      {/* Main Content Grid: Recent Transactions and Stock Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentActivity
           transactions={transactions}

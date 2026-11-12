@@ -9,10 +9,8 @@ interface StockOverviewProps {
 }
 
 export const StockOverview: React.FC<StockOverviewProps> = ({ items }) => {
-  // Find items where stock is 0 or low (<= 2)
   const lowStockItems = items.filter((item) => item.stock <= 2);
 
-  // Group items by category with counts
   const categoryCounts: Record<string, { totalItems: number; availableStock: number }> = {};
   items.forEach((item) => {
     if (!categoryCounts[item.category]) {
@@ -23,45 +21,48 @@ export const StockOverview: React.FC<StockOverviewProps> = ({ items }) => {
   });
 
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col h-full">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-        <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 text-slate-500" aria-hidden="true" />
-          Status Ketersediaan & Stok Menipis
-        </h2>
-        <span className="text-xs text-slate-500 tabular-nums">
-          {items.length} total jenis
+    <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 w-full shadow-lg rounded-lg border border-blueGray-100 dark:border-blueGray-700">
+      {/* Notus Card Header */}
+      <div className="rounded-t mb-0 px-5 py-4 border-b border-solid border-blueGray-100 dark:border-blueGray-700 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-blueGray-400" aria-hidden="true" />
+          <h3 className="font-bold text-sm uppercase text-blueGray-700 dark:text-blueGray-100 tracking-wider">
+            Ketersediaan & Stok Kritis
+          </h3>
+        </div>
+        <span className="text-[11px] font-bold uppercase text-blueGray-400 tabular-nums">
+          {items.length} jenis aset
         </span>
       </div>
 
-      <div className="mt-3 space-y-4 flex-1">
-        {/* Low Stock Warning Box */}
+      <div className="p-5 space-y-5">
+        {/* Low Stock Warning Section */}
         <div>
-          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
-            Perhatian Stok Kritis (Stok &le; 2)
-          </p>
+          <h6 className="text-[11px] font-bold uppercase text-blueGray-400 tracking-wider mb-2">
+            Peralatan dengan Stok Kritis (&le; 2 unit)
+          </h6>
           {lowStockItems.length === 0 ? (
-            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-lg flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300">
-              <CheckCircle2 className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span>Semua peralatan saat ini memiliki ketersediaan yang mencukupi.</span>
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300">
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" aria-hidden="true" />
+              <span>Semua peralatan laboratorium memiliki ketersediaan yang mencukupi.</span>
             </div>
           ) : (
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               {lowStockItems.slice(0, 4).map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs"
+                  className="flex items-center justify-between p-2.5 rounded bg-blueGray-50 dark:bg-blueGray-700/60 border border-blueGray-100 dark:border-blueGray-600 text-xs"
                 >
                   <div className="min-w-0 pr-2">
-                    <span className="font-semibold text-slate-900 dark:text-slate-100 block truncate">
+                    <span className="font-bold text-blueGray-800 dark:text-blueGray-100 block truncate">
                       {item.name}
                     </span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                    <span className="text-[10px] text-blueGray-400 font-mono">
                       Kode: {item.code}
                     </span>
                   </div>
                   <Badge variant={item.stock === 0 ? 'danger' : 'warning'} className="shrink-0 text-[10px]">
-                    {item.stock === 0 ? 'Habis (0)' : `Tersisa ${item.stock}`}
+                    {item.stock === 0 ? 'Habis (0)' : `Sisa ${item.stock} unit`}
                   </Badge>
                 </div>
               ))}
@@ -70,22 +71,22 @@ export const StockOverview: React.FC<StockOverviewProps> = ({ items }) => {
         </div>
 
         {/* Category Breakdown */}
-        <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
-            Ringkasan Berdasarkan Kategori
-          </p>
+        <div className="pt-3 border-t border-blueGray-100 dark:border-blueGray-700">
+          <h6 className="text-[11px] font-bold uppercase text-blueGray-400 tracking-wider mb-2.5">
+            Sebaran Berdasarkan Kategori
+          </h6>
           <div className="grid grid-cols-2 gap-2 text-xs">
             {Object.entries(categoryCounts).slice(0, 4).map(([category, count]) => (
               <div
                 key={category}
-                className="p-2 rounded-lg bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60"
+                className="p-2.5 rounded bg-blueGray-50/70 dark:bg-blueGray-700/40 border border-blueGray-100 dark:border-blueGray-600"
               >
-                <span className="text-[11px] text-slate-600 dark:text-slate-400 block truncate font-medium">
+                <span className="text-[11px] text-blueGray-500 dark:text-blueGray-300 block truncate font-bold">
                   {category}
                 </span>
                 <div className="flex items-baseline justify-between mt-1">
-                  <span className="text-xs text-slate-500">{count.totalItems} jenis</span>
-                  <span className="text-xs font-bold text-teal-700 dark:text-teal-400 tabular-nums">
+                  <span className="text-[11px] text-blueGray-400">{count.totalItems} jenis</span>
+                  <span className="text-xs font-bold text-lightBlue-600 dark:text-lightBlue-400 tabular-nums">
                     {count.availableStock} siap
                   </span>
                 </div>

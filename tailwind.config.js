@@ -1,3 +1,5 @@
+import colors from 'tailwindcss/colors';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -8,6 +10,8 @@ export default {
   theme: {
     extend: {
       colors: {
+        blueGray: colors.slate,
+        lightBlue: colors.sky,
         brand: {
           50: '#f0fdfa',
           100: '#ccfbf1',

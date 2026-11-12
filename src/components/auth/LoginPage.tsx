@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { Input } from '../common/Input';
-import { Button } from '../common/Button';
-import { Monitor, Sun, Moon, Shield, KeyRound, ArrowRight } from 'lucide-react';
+import { Monitor, Sun, Moon, Shield, ArrowRight } from 'lucide-react';
 
 interface LoginPageProps {
   onOpenSubmissionModal: () => void;
@@ -39,146 +38,143 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) =
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-      {/* Header bar */}
-      <header className="px-6 py-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-teal-700 dark:bg-teal-600 text-white flex items-center justify-center shadow-xs">
-            <Monitor className="w-4 h-4" aria-hidden="true" />
+    <div className="min-h-screen flex flex-col justify-between bg-blueGray-800 text-blueGray-100 transition-colors">
+      {/* Notus Auth Top Navbar */}
+      <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-4 py-3">
+        <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+          <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
+            <div className="flex items-center gap-2 text-white font-bold text-sm uppercase py-2">
+              <div className="w-7 h-7 rounded bg-lightBlue-500 text-white flex items-center justify-center shadow">
+                <Monitor className="w-4 h-4" aria-hidden="true" />
+              </div>
+              <span>LabFlow Inventaris</span>
+            </div>
           </div>
-          <div>
-            <span className="text-base font-bold tracking-tight text-slate-900 dark:text-slate-100">
-              LabFlow
-            </span>
-            <span className="hidden sm:inline-block text-xs text-slate-500 dark:text-slate-400 ml-2 border-l border-slate-300 dark:border-slate-700 pl-2">
-              Laboratory Inventory & Borrowing System
-            </span>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onOpenSubmissionModal}
+              className="bg-lightBlue-600 hover:bg-lightBlue-700 text-white text-xs font-bold uppercase px-3 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer min-h-[40px]"
+            >
+              Info Pengumpulan & Demo
+            </button>
+
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Ganti ke tema terang' : 'Ganti ke tema gelap'}
+              className="p-2 text-blueGray-300 hover:text-white rounded cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400" aria-hidden="true" />
+              ) : (
+                <Moon className="w-4 h-4 text-blueGray-300" aria-hidden="true" />
+              )}
+            </button>
           </div>
         </div>
+      </nav>
 
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={onOpenSubmissionModal}
-            className="text-xs text-teal-800 dark:text-teal-200"
-          >
-            Info Pengumpulan & Demo
-          </Button>
-
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Ganti ke tema terang' : 'Ganti ke tema gelap'}
-            className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
-          >
-            {theme === 'dark' ? (
-              <Sun className="w-4 h-4 text-amber-400" aria-hidden="true" />
-            ) : (
-              <Moon className="w-4 h-4 text-slate-600" aria-hidden="true" />
-            )}
-          </button>
-        </div>
-      </header>
-
-      {/* Main Login Card */}
-      <main className="flex-1 flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="text-center space-y-1.5">
-            <div className="w-12 h-12 rounded-xl bg-teal-50 dark:bg-teal-950/80 border border-teal-200 dark:border-teal-800 text-teal-700 dark:text-teal-300 mx-auto flex items-center justify-center mb-3">
-              <KeyRound className="w-6 h-6" aria-hidden="true" />
-            </div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-              Masuk ke Sistem Laboratorium
-            </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Gunakan akun Administrator atau Staff operasional Anda
-            </p>
-          </div>
-
-          {errorMessage && (
-            <div
-              role="alert"
-              className="p-3 bg-rose-50 text-rose-900 border border-rose-200 dark:bg-rose-950/50 dark:text-rose-200 dark:border-rose-800 rounded-lg text-xs leading-relaxed"
-            >
-              {errorMessage}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label="Username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Masukkan username"
-              required
-              autoComplete="username"
-            />
-
-            <Input
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Masukkan password"
-              required
-              autoComplete="current-password"
-            />
-
-            <Button
-              variant="primary"
-              size="lg"
-              type="submit"
-              disabled={isLoading}
-              className="w-full text-sm font-semibold mt-2"
-              icon={<ArrowRight className="w-4 h-4" />}
-            >
-              {isLoading ? 'Memeriksa Kredensial...' : 'Masuk ke Sistem'}
-            </Button>
-          </form>
-
-          {/* Quick Demo Login Shortcuts for Examiners / Lecturers */}
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2.5">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 text-center">
-              Akses Cepat Pengujian Demo (Poin G)
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => handleQuickDemo('admin')}
-                className="p-2.5 rounded-lg border border-teal-200 dark:border-teal-800 bg-teal-50/60 dark:bg-teal-950/40 text-left hover:bg-teal-100 dark:hover:bg-teal-900/60 transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-1.5 text-xs font-bold text-teal-900 dark:text-teal-200">
-                  <Shield className="w-3.5 h-3.5" aria-hidden="true" />
+      {/* Main Notus Centered Auth Card */}
+      <main className="container mx-auto px-4 h-full flex-1 flex items-center justify-center pt-20 pb-12">
+        <div className="w-full lg:w-4/12 px-4">
+          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-2xl rounded-lg bg-blueGray-100 dark:bg-blueGray-900 border border-blueGray-700">
+            {/* Card Header (Notus Quick OAuth style for Dosen / Examiner) */}
+            <div className="rounded-t mb-0 px-6 py-6 border-b border-blueGray-200 dark:border-blueGray-700">
+              <div className="text-center mb-3">
+                <h6 className="text-blueGray-500 dark:text-blueGray-400 text-xs font-bold uppercase tracking-wider">
+                  Pengujian Akun Cepat (Coding Talent Challenge)
+                </h6>
+              </div>
+              <div className="btn-wrapper text-center flex items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleQuickDemo('admin')}
+                  className="bg-white active:bg-blueGray-50 text-blueGray-700 font-bold px-3 py-2 rounded outline-none focus:outline-none uppercase shadow hover:shadow-md inline-flex items-center text-xs ease-linear transition-all duration-150 cursor-pointer min-h-[44px]"
+                >
+                  <Shield className="w-4 h-4 mr-1 text-lightBlue-600" aria-hidden="true" />
                   <span>Demo Admin</span>
-                </div>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  admin / admin123
-                </p>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleQuickDemo('staff')}
-                className="p-2.5 rounded-lg border border-sky-200 dark:border-sky-800 bg-sky-50/60 dark:bg-sky-950/40 text-left hover:bg-sky-100 dark:hover:bg-sky-900/60 transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-1.5 text-xs font-bold text-sky-900 dark:text-sky-200">
-                  <Monitor className="w-3.5 h-3.5" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickDemo('staff')}
+                  className="bg-white active:bg-blueGray-50 text-blueGray-700 font-bold px-3 py-2 rounded outline-none focus:outline-none uppercase shadow hover:shadow-md inline-flex items-center text-xs ease-linear transition-all duration-150 cursor-pointer min-h-[44px]"
+                >
+                  <Monitor className="w-4 h-4 mr-1 text-emerald-600" aria-hidden="true" />
                   <span>Demo Staff</span>
+                </button>
+              </div>
+              <p className="text-[11px] text-center text-blueGray-400 mt-2">
+                admin/admin123 atau staff/staff123
+              </p>
+            </div>
+
+            {/* Form Body */}
+            <div className="flex-auto px-4 lg:px-8 py-8 pt-6">
+              <div className="text-blueGray-400 text-center mb-5 font-bold text-xs uppercase tracking-wider">
+                <span>Atau Masuk dengan Kredensial</span>
+              </div>
+
+              {errorMessage && (
+                <div
+                  role="alert"
+                  className="mb-4 p-3 bg-red-100 text-red-900 border border-red-300 dark:bg-red-950/60 dark:text-red-200 dark:border-red-800 rounded text-xs font-semibold"
+                >
+                  {errorMessage}
                 </div>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  staff / staff123
-                </p>
-              </button>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <Input
+                  label="Username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="admin atau staff"
+                  required
+                  autoComplete="username"
+                />
+
+                <Input
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="admin123 atau staff123"
+                  required
+                  autoComplete="current-password"
+                />
+
+                <div className="text-center mt-6">
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="bg-blueGray-800 text-white active:bg-blueGray-600 text-xs font-bold uppercase px-6 py-3.5 rounded shadow hover:shadow-lg outline-none focus:outline-none w-full ease-linear transition-all duration-150 cursor-pointer flex items-center justify-center gap-2 min-h-[44px]"
+                  >
+                    <span>{isLoading ? 'Memeriksa...' : 'Masuk ke Sistem'}</span>
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="py-4 text-center text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60">
-        <p>&copy; 2026 LabFlow - Laboratory Inventory & Borrowing System</p>
+      {/* Footer (Notus Auth Footer) */}
+      <footer className="pb-4">
+        <div className="container mx-auto px-4">
+          <hr className="mb-4 border-b-1 border-blueGray-700" />
+          <div className="flex flex-wrap items-center md:justify-between justify-center text-xs text-blueGray-400">
+            <div>
+              &copy; 2026 LabFlow - Creative Tim Notus NextJS Design Style
+            </div>
+            <div className="mt-2 md:mt-0">
+              Laboratorium Komputer &bull; Coding Talent Challenge
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );

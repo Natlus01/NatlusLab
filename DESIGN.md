@@ -1,28 +1,34 @@
-# Design Direction: LabFlow (Laboratory Inventory & Borrowing System)
+# Design Direction: LabFlow (Inspired by Creative Tim Notus NextJS)
 
-## 1. Identity & Purpose
+## 1. Identity & Style Framework
 - **System Name:** LabFlow (Laboratory Inventory & Borrowing Management System)
-- **Domain:** Computer Laboratory Management (hardware, peripherals, network equipment, tools)
-- **Design Philosophy:** Utilitarian, precise, high data-density with clear visual hierarchy, accessible, and fast. Built for lab administrators and staff performing operational duties.
+- **Design Archetype:** Creative Tim Notus NextJS Tailwind Dashboard UI Kit
+- **Core Philosophy:** High-contrast admin dashboard with `blueGray` foundation, deep header banner with overlapping stat cards (`-mt-24` aesthetic), distinct uppercase section labels, and card tables (`CardTable` pattern).
 
-## 2. Liveliness Dials (Antislop Core Part 3)
-- **ENERGY: 1 (Calm)**: Restrained, professional, focused on data clarity and task execution without unnecessary visual noise or dramatic flair.
-- **RHYTHM: 2 (Structured)**: Deliberate cadence between quick summary metrics, action-oriented forms, and clear tabular data views.
-- **MOTION: 1 (Functional)**: Subtle hover feedback and modal state transitions only. Zero looping pulses, zero bouncing decorations.
+## 2. Color Palette & Notus System
+- **Foundation Palette:** `blueGray` (Tailwind slate scale: `#f8fafc` to `#0f172a`)
+- **Primary Accent:** `lightBlue` (`#0284c7`, `#0ea5e9`) & `emerald` (`#059669`, `#10b981`)
+- **Status Accents:**
+  - `red-500` / `rose-600`: Critical / Out of stock / Delete
+  - `orange-500` / `amber-500`: Warning / Borrowed
+  - `emerald-500`: Available / Completed / Active
+  - `lightBlue-500`: Stats / Info / Neutral Actions
+- **Contrast Guarantee:** Every text pairing complies with WCAG AA standard (4.5:1 minimum).
 
-## 3. Color Palette & Typography
-- **Core Dark / Structure:** Slate Navy (`#0F172A`, `#1E293B`)
-- **Backgrounds:**
-  - Light mode: Pure white (`#FFFFFF`) with subtle canvas `#F8FAFC` and borders `#E2E8F0`
-  - Dark mode: Slate `#0B0F17` with surface `#1E293B` and borders `#334155`
-- **Primary Functional Accent:** Emerald/Teal (`#0D9488` / `#059669`) for positive status, primary actions, and confirmed states.
-- **Warning / Alert Accents:** Amber (`#D97706`) for low stock / borrowed items; Rose (`#E11D48`) for danger / deletion actions.
-- **Contrast Guarantee:** Every text pairing complies with WCAG AA minimum 4.5:1 for standard body text and 3:1 for large text.
-- **Typography:** Inter / system sans-serif font stack. Clear tabular figures (`font-variant-numeric: tabular-nums`) for numbers and codes.
-
-## 4. Components & Affordances
-- **Interactive Elements:** Explicit `cursor: pointer` on all buttons, interactive table rows, and toggles (`cursor: not-allowed` on disabled elements).
-- **Focus Rings:** Distinct 2px offset focus ring (`focus-visible:ring-2 focus-visible:ring-teal-500`) for keyboard accessibility.
-- **Buttons:** Minimum tap target of 44x44px on touch viewports.
-- **Empty & Error States:** Clear contextual explanations stating what is missing and the direct action to take.
-- **Theme Support:** Fully verified Light and Dark modes.
+## 3. Notus Layout Structure
+- **Sidebar (`Sidebar.js` style):**
+  - Left vertical navigation with brand logo at top
+  - Distinct horizontal dividers (`my-4 md:min-w-full`)
+  - Subheaders in uppercase bold tracked text (`text-blueGray-400 text-xs uppercase font-bold block pt-1 pb-4`)
+  - Nav items with distinct icons and active color highlight
+- **Header Banner & Stats (`HeaderStats.js` style):**
+  - Dark header background (`bg-blueGray-800 dark:bg-slate-900 pb-32 pt-8`)
+  - Overlapping 4-card statistics row with circular colored icon badges (`rounded-full p-3`)
+- **Main Card Content (`CardTable.js` style):**
+  - Responsive container overlapping or nested within the header
+  - White / dark slate card container with `shadow-lg rounded border-0`
+  - Uppercase tracked table header cells (`bg-blueGray-50 text-blueGray-500 text-xs uppercase font-semibold px-6 py-3`)
+- **Auth Page (`Auth.js` style):**
+  - Full-screen `bg-blueGray-800` canvas with centered auth card
+  - Quick demo login buttons with subtle shadows
+  - Uppercase rounded input fields and action buttons

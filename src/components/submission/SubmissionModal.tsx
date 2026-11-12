@@ -69,8 +69,8 @@ CODING TALENT CHALLENGE
    - Username             : staff
    - Password             : staff123
 7. Teknologi Digunakan    :
-   - Frontend & UI        : React (TypeScript) + Tailwind CSS + Vite
-   - State & Storage      : Reactive LocalStorage Engine + JSON Backup/Export
+   - Framework & UI       : React 18 (TypeScript) + Tailwind CSS (Inspirasi Notus NextJS) + Vite
+   - State & Persistence  : Reactive LocalStorage Engine + JSON Backup/Export
    - Hosting Platform     : Vercel / Netlify
 ==============================`;
 
@@ -84,14 +84,14 @@ CODING TALENT CHALLENGE
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Format Pengumpulan & Akun Demo"
+      title="Lembar Format Pengumpulan Tugas"
       description="Sesuai poin G dokumen Coding Talent Challenge"
       maxWidth="lg"
     >
       <div className="space-y-5">
         {/* Student Data Form */}
-        <form onSubmit={handleSaveStudentInfo} className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3">
-          <p className="text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">
+        <form onSubmit={handleSaveStudentInfo} className="p-4 rounded-lg bg-blueGray-50 dark:bg-blueGray-900 border border-blueGray-200 dark:border-blueGray-700 space-y-3">
+          <p className="text-xs font-bold uppercase text-blueGray-600 dark:text-blueGray-300">
             Identitas Mahasiswa Pengumpul
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -123,32 +123,32 @@ CODING TALENT CHALLENGE
 
         {/* Demo Accounts Box */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="p-3.5 rounded-lg border border-teal-200 dark:border-teal-800 bg-teal-50/50 dark:bg-teal-950/30">
-            <p className="text-xs font-bold text-teal-900 dark:text-teal-200 uppercase mb-1">
+          <div className="p-3.5 rounded-lg border border-lightBlue-200 dark:border-lightBlue-800 bg-lightBlue-50/60 dark:bg-lightBlue-950/30">
+            <p className="text-xs font-bold text-lightBlue-900 dark:text-lightBlue-200 uppercase mb-1">
               Akun Demo Admin
             </p>
-            <p className="text-xs text-slate-700 dark:text-slate-300">
-              Username: <code className="font-mono font-bold text-teal-800 dark:text-teal-300">admin</code>
+            <p className="text-xs text-blueGray-700 dark:text-blueGray-300">
+              Username: <code className="font-mono font-bold text-lightBlue-700 dark:text-lightBlue-300">admin</code>
             </p>
-            <p className="text-xs text-slate-700 dark:text-slate-300">
-              Password: <code className="font-mono font-bold text-teal-800 dark:text-teal-300">admin123</code>
+            <p className="text-xs text-blueGray-700 dark:text-blueGray-300">
+              Password: <code className="font-mono font-bold text-lightBlue-700 dark:text-lightBlue-300">admin123</code>
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-[11px] text-blueGray-500 dark:text-blueGray-400 mt-1">
               Hak akses: CRUD barang, kelola staff, pantau semua transaksi.
             </p>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-sky-200 dark:border-sky-800 bg-sky-50/50 dark:bg-sky-950/30">
-            <p className="text-xs font-bold text-sky-900 dark:text-sky-200 uppercase mb-1">
+          <div className="p-3.5 rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/30">
+            <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200 uppercase mb-1">
               Akun Demo Staff
             </p>
-            <p className="text-xs text-slate-700 dark:text-slate-300">
-              Username: <code className="font-mono font-bold text-sky-800 dark:text-sky-300">staff</code>
+            <p className="text-xs text-blueGray-700 dark:text-blueGray-300">
+              Username: <code className="font-mono font-bold text-emerald-700 dark:text-emerald-300">staff</code>
             </p>
-            <p className="text-xs text-slate-700 dark:text-slate-300">
-              Password: <code className="font-mono font-bold text-sky-800 dark:text-sky-300">staff123</code>
+            <p className="text-xs text-blueGray-700 dark:text-blueGray-300">
+              Password: <code className="font-mono font-bold text-emerald-700 dark:text-emerald-300">staff123</code>
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-[11px] text-blueGray-500 dark:text-blueGray-400 mt-1">
               Hak akses: Pencatatan peminjaman, pengembalian, cek ketersediaan.
             </p>
           </div>
@@ -157,26 +157,26 @@ CODING TALENT CHALLENGE
         {/* Formatted Submission Text Preview */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <span className="text-xs font-bold uppercase text-blueGray-600 dark:text-blueGray-300">
               Pratinjau Teks Pengumpulan
             </span>
-            <Button
-              size="sm"
-              variant="outline"
-              icon={copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+            <button
+              type="button"
               onClick={handleCopy}
+              className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-[11px] px-3 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
             >
-              {copied ? 'Tersalin' : 'Salin Lembar Tugas'}
-            </Button>
+              {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? 'Tersalin' : 'Salin Lembar Tugas'}</span>
+            </button>
           </div>
-          <pre className="p-3 bg-slate-900 text-slate-100 rounded-lg text-[11px] font-mono leading-relaxed overflow-x-auto select-all max-h-48 border border-slate-700">
+          <pre className="p-3 bg-blueGray-900 text-blueGray-100 rounded text-[11px] font-mono leading-relaxed overflow-x-auto select-all max-h-48 border border-blueGray-700">
             {submissionText}
           </pre>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500">
+        <div className="flex items-center justify-between pt-2 border-t border-blueGray-200 dark:border-blueGray-700 text-xs text-blueGray-500">
           <span className="flex items-center gap-1">
-            Host: <strong className="text-slate-700 dark:text-slate-300">{currentOrigin}</strong>
+            Host: <strong className="text-blueGray-800 dark:text-blueGray-200">{currentOrigin}</strong>
           </span>
           <Button size="sm" variant="ghost" onClick={onClose}>
             Tutup

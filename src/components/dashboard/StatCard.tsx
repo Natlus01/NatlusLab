@@ -6,7 +6,7 @@ interface StatCardProps {
   unit?: string;
   icon: React.ReactNode;
   description?: string;
-  variant?: 'teal' | 'emerald' | 'amber' | 'sky';
+  variant?: 'red' | 'orange' | 'emerald' | 'lightBlue';
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -15,42 +15,50 @@ export const StatCard: React.FC<StatCardProps> = ({
   unit,
   icon,
   description,
-  variant = 'teal',
+  variant = 'lightBlue',
 }) => {
-  const iconVariantClasses = {
-    teal: 'bg-teal-50 dark:bg-teal-950/70 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800',
-    emerald: 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-    amber: 'bg-amber-50 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800',
-    sky: 'bg-sky-50 dark:bg-sky-950/70 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-800',
+  // Notus circular icon background colors
+  const iconBackgrounds = {
+    red: 'bg-red-500',
+    orange: 'bg-orange-500',
+    emerald: 'bg-emerald-500',
+    lightBlue: 'bg-lightBlue-500',
   };
 
   return (
-    <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs flex flex-col justify-between">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            {label}
-          </p>
-          <div className="mt-2 flex items-baseline gap-1.5">
-            <span className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 tabular-nums">
-              {value}
-            </span>
-            {unit && (
-              <span className="text-xs text-slate-500 dark:text-slate-400">
-                {unit}
+    <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 rounded-lg shadow-lg border border-blueGray-100 dark:border-blueGray-700 p-4 transition-all hover:shadow-xl">
+      <div className="flex-auto p-1">
+        <div className="flex flex-wrap items-center">
+          <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+            <h5 className="text-blueGray-400 uppercase font-bold text-xs tracking-wider">
+              {label}
+            </h5>
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className="font-bold text-2xl text-blueGray-700 dark:text-blueGray-100 tabular-nums">
+                {value}
               </span>
-            )}
+              {unit && (
+                <span className="text-xs font-semibold text-blueGray-400">
+                  {unit}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="relative w-auto pl-4 flex-initial">
+            <div
+              className={`text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full ${iconBackgrounds[variant]}`}
+              aria-hidden="true"
+            >
+              {icon}
+            </div>
           </div>
         </div>
-        <div className={`p-2.5 rounded-lg border ${iconVariantClasses[variant]} shrink-0`} aria-hidden="true">
-          {icon}
-        </div>
+        {description && (
+          <p className="text-xs text-blueGray-400 dark:text-blueGray-400 mt-4 pt-2 border-t border-blueGray-100 dark:border-blueGray-700/60 flex items-center">
+            <span className="whitespace-nowrap font-medium">{description}</span>
+          </p>
+        )}
       </div>
-      {description && (
-        <p className="mt-3 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800/80 pt-2.5">
-          {description}
-        </p>
-      )}
     </div>
   );
 };

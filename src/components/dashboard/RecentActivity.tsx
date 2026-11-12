@@ -15,37 +15,38 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
   const recent = transactions.slice(0, 5);
 
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs flex flex-col h-full">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+    <div className="relative flex flex-col min-w-0 break-words bg-white dark:bg-blueGray-800 w-full shadow-lg rounded-lg border border-blueGray-100 dark:border-blueGray-700">
+      {/* Notus Card Header */}
+      <div className="rounded-t mb-0 px-5 py-4 border-b border-solid border-blueGray-100 dark:border-blueGray-700 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-slate-500" aria-hidden="true" />
-          <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+          <Clock className="w-4 h-4 text-blueGray-400" aria-hidden="true" />
+          <h3 className="font-bold text-sm uppercase text-blueGray-700 dark:text-blueGray-100 tracking-wider">
             Aktivitas Transaksi Terbaru
-          </h2>
+          </h3>
         </div>
         <button
           type="button"
           onClick={onViewAll}
-          className="text-xs text-teal-700 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 font-medium cursor-pointer"
+          className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-[11px] px-3 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer"
         >
           Lihat Semua
         </button>
       </div>
 
-      <div className="divide-y divide-slate-100 dark:divide-slate-800 flex-1">
+      <div className="p-4 divide-y divide-blueGray-100 dark:divide-blueGray-700">
         {recent.length === 0 ? (
-          <div className="py-8 text-center text-xs text-slate-500">
+          <div className="py-8 text-center text-xs text-blueGray-400">
             Belum ada aktivitas transaksi yang tercatat.
           </div>
         ) : (
           recent.map((trx) => (
-            <div key={trx.id} className="py-3 flex items-center justify-between gap-3">
+            <div key={trx.id} className="py-3.5 flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                  className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${
                     trx.status === 'DIPINJAM'
-                      ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                      : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-emerald-500 text-white'
                   }`}
                   aria-hidden="true"
                 >
@@ -56,10 +57,10 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 truncate">
+                  <p className="text-xs font-bold text-blueGray-800 dark:text-blueGray-100 truncate">
                     {trx.borrowerName}
                   </p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                  <p className="text-[11px] text-blueGray-400 truncate mt-0.5">
                     {trx.quantity} unit {trx.itemName} ({trx.itemCode})
                   </p>
                 </div>
@@ -72,7 +73,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
                 >
                   {trx.status === 'DIPINJAM' ? 'Dipinjam' : 'Selesai'}
                 </Badge>
-                <p className="text-[10px] text-slate-400 mt-1 tabular-nums">
+                <p className="text-[10px] text-blueGray-400 mt-1 tabular-nums font-semibold">
                   {trx.borrowDate}
                 </p>
               </div>

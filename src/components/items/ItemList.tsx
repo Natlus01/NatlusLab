@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { Item } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { SearchBar } from '../common/SearchBar';
-import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { EmptyState } from '../common/EmptyState';
 import { ItemFormModal } from './ItemFormModal';
@@ -45,7 +44,6 @@ export const ItemList: React.FC<ItemListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [stockFilter, setStockFilter] = useState<'ALL' | 'AVAILABLE' | 'OUT_OF_STOCK'>('ALL');
 
-  // Modals state
   const [isAddEditOpen, setIsAddEditOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [deletingItem, setDeletingItem] = useState<Item | null>(null);
@@ -127,57 +125,45 @@ export const ItemList: React.FC<ItemListProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Header and Quick Add */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-            Manajemen Inventaris Barang
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Daftar peralatan laboratorium komputer, ketersediaan unit, dan status peminjaman.
-          </p>
+      {/* Header bar and search controls */}
+      <div className="p-5 rounded-lg border border-blueGray-200 dark:border-blueGray-700 bg-white dark:bg-blueGray-800 shadow-lg space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h6 className="text-xs uppercase font-bold text-blueGray-400">
+              Master Data Laboratorium
+            </h6>
+            <h1 className="text-xl font-bold uppercase tracking-tight text-blueGray-800 dark:text-blueGray-100 mt-0.5">
+              Daftar Barang & Inventaris
+            </h1>
+          </div>
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={handleOpenAdd}
+              className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-xs px-4 py-2.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <Plus className="w-4 h-4" aria-hidden="true" />
+              <span>Tambah Barang Baru</span>
+            </button>
+          )}
         </div>
-        {isAdmin && (
-          <Button
-            variant="primary"
-            icon={<Plus className="w-4 h-4" />}
-            onClick={handleOpenAdd}
-          >
-            Tambah Barang Baru
-          </Button>
-        )}
-      </div>
 
-      {notification && (
-        <div
-          role="status"
-          className={`p-3 rounded-lg text-xs font-medium border ${
-            notification.type === 'success'
-              ? 'bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800'
-              : 'bg-rose-50 text-rose-900 border-rose-200 dark:bg-rose-950/50 dark:text-rose-200 dark:border-rose-800'
-          }`}
-        >
-          {notification.text}
-        </div>
-      )}
-
-      {/* Filters & Search */}
-      <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* Filter and Search Bar */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-blueGray-100 dark:border-blueGray-700">
           <div className="md:col-span-2">
             <SearchBar
               value={searchTerm}
               onChange={setSearchTerm}
-              placeholder="Cari kode (BR001) atau nama perangkat (Lenovo, Mouse, Monitor)..."
-              ariaLabel="Cari barang inventaris"
+              placeholder="Cari kode (BR001) atau nama perangkat (Lenovo, Mouse, dsb)..."
+              ariaLabel="Cari inventaris barang"
             />
           </div>
           <div className="flex gap-2">
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              aria-label="Filter kategori peralatan"
-              className="w-full min-h-[44px] px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 cursor-pointer"
+              aria-label="Filter kategori"
+              className="w-full min-h-[44px] px-3 py-2 text-xs rounded border border-blueGray-300 dark:border-blueGray-600 bg-white dark:bg-blueGray-900 text-blueGray-700 dark:text-blueGray-200 cursor-pointer"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -190,7 +176,7 @@ export const ItemList: React.FC<ItemListProps> = ({
               value={stockFilter}
               onChange={(e) => setStockFilter(e.target.value as any)}
               aria-label="Filter status stok"
-              className="w-full min-h-[44px] px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 cursor-pointer"
+              className="w-full min-h-[44px] px-3 py-2 text-xs rounded border border-blueGray-300 dark:border-blueGray-600 bg-white dark:bg-blueGray-900 text-blueGray-700 dark:text-blueGray-200 cursor-pointer"
             >
               <option value="ALL">Semua Stok</option>
               <option value="AVAILABLE">Tersedia (&gt; 0)</option>
@@ -199,8 +185,7 @@ export const ItemList: React.FC<ItemListProps> = ({
           </div>
         </div>
 
-        {/* Active search filter pills summary */}
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
+        <div className="flex items-center justify-between text-xs text-blueGray-400">
           <span>Menampilkan <strong>{filteredItems.length}</strong> dari {items.length} jenis peralatan</span>
           {(searchTerm || selectedCategory !== 'ALL' || stockFilter !== 'ALL') && (
             <button
@@ -210,7 +195,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                 setSelectedCategory('ALL');
                 setStockFilter('ALL');
               }}
-              className="text-teal-700 hover:text-teal-800 dark:text-teal-400 font-medium cursor-pointer"
+              className="text-lightBlue-600 dark:text-lightBlue-400 font-bold uppercase text-[11px] cursor-pointer"
             >
               Reset Filter
             </button>
@@ -218,64 +203,91 @@ export const ItemList: React.FC<ItemListProps> = ({
         </div>
       </div>
 
-      {/* Main Table View */}
+      {notification && (
+        <div
+          role="status"
+          className={`p-3 rounded text-xs font-semibold border ${
+            notification.type === 'success'
+              ? 'bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800'
+              : 'bg-rose-50 text-rose-900 border-rose-200 dark:bg-rose-950/50 dark:text-rose-200 dark:border-rose-800'
+          }`}
+        >
+          {notification.text}
+        </div>
+      )}
+
+      {/* Notus CardTable Layout */}
       {filteredItems.length === 0 ? (
         <EmptyState
-          icon={<Package className="w-8 h-8" />}
+          icon={<Package className="w-8 h-8 text-blueGray-400" />}
           title="Tidak Ada Barang Ditemukan"
           description={
             searchTerm || selectedCategory !== 'ALL' || stockFilter !== 'ALL'
-              ? 'Tidak ada barang yang cocok dengan kriteria pencarian dan filter Anda saat ini.'
+              ? 'Tidak ada barang yang cocok dengan kriteria pencarian dan filter Anda.'
               : 'Belum ada data barang laboratorium yang tersimpan di sistem.'
           }
           actionLabel={isAdmin ? 'Tambah Barang Pertama' : undefined}
           onAction={isAdmin ? handleOpenAdd : undefined}
         />
       ) : (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-xs">
+        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white dark:bg-blueGray-800 border border-blueGray-100 dark:border-blueGray-700 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+            <table className="items-center w-full bg-transparent border-collapse text-left text-xs">
+              <thead>
                 <tr>
-                  <th scope="col" className="py-3.5 px-4">Kode</th>
-                  <th scope="col" className="py-3.5 px-4">Nama Barang</th>
-                  <th scope="col" className="py-3.5 px-4 hidden md:table-cell">Kategori</th>
-                  <th scope="col" className="py-3.5 px-4 text-center">Stok Siap</th>
-                  <th scope="col" className="py-3.5 px-4 text-center hidden sm:table-cell">Dipinjam</th>
-                  <th scope="col" className="py-3.5 px-4 text-center">Status</th>
-                  <th scope="col" className="py-3.5 px-4 text-right">Aksi</th>
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                    Kode
+                  </th>
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                    Nama Barang
+                  </th>
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600 hidden md:table-cell">
+                    Kategori
+                  </th>
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                    Stok Siap
+                  </th>
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600 hidden sm:table-cell">
+                    Dipinjam
+                  </th>
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                    Status
+                  </th>
+                  <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-right bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-blueGray-100 dark:divide-blueGray-700">
                 {filteredItems.map((item) => (
                   <tr
                     key={item.id}
-                    className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
+                    className="hover:bg-blueGray-50/70 dark:hover:bg-blueGray-700/40 transition-colors"
                   >
-                    <td className="py-3.5 px-4 font-mono font-bold text-teal-800 dark:text-teal-300">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 font-mono font-bold text-lightBlue-600 dark:text-lightBlue-400">
                       {item.code}
                     </td>
-                    <td className="py-3.5 px-4">
-                      <div className="font-semibold text-slate-900 dark:text-slate-100">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="font-bold text-blueGray-800 dark:text-blueGray-100 text-sm">
                         {item.name}
                       </div>
-                      <div className="text-[11px] text-slate-500 md:hidden mt-0.5">
+                      <div className="text-[11px] text-blueGray-400 md:hidden mt-0.5">
                         {item.category}
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 hidden md:table-cell text-slate-600 dark:text-slate-400">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 hidden md:table-cell text-blueGray-600 dark:text-blueGray-300 font-medium">
                       <span className="inline-flex items-center gap-1.5">
-                        <Layers className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
+                        <Layers className="w-3.5 h-3.5 text-blueGray-400" aria-hidden="true" />
                         {item.category}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-center font-bold text-slate-900 dark:text-slate-100 tabular-nums">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center font-bold text-blueGray-800 dark:text-blueGray-100 tabular-nums text-sm">
                       {item.stock}
                     </td>
-                    <td className="py-3.5 px-4 text-center hidden sm:table-cell text-slate-500 dark:text-slate-400 tabular-nums">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center hidden sm:table-cell text-blueGray-500 dark:text-blueGray-400 tabular-nums">
                       {item.borrowedCount}
                     </td>
-                    <td className="py-3.5 px-4 text-center">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
                       {item.stock > 0 ? (
                         <Badge variant="success" className="text-[10px]">
                           Tersedia
@@ -286,20 +298,19 @@ export const ItemList: React.FC<ItemListProps> = ({
                         </Badge>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-right">
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         {onBorrowItemRequest && (
-                          <Button
-                            size="sm"
-                            variant="primary"
-                            icon={<ArrowUpRight className="w-3.5 h-3.5" />}
+                          <button
+                            type="button"
                             onClick={() => onBorrowItemRequest(item)}
                             disabled={item.stock <= 0}
                             title={item.stock <= 0 ? 'Stok sedang kosong' : 'Pinjam barang ini'}
-                            className="hidden sm:inline-flex text-xs px-2.5"
+                            className="bg-lightBlue-500 hover:bg-lightBlue-600 active:bg-lightBlue-700 text-white font-bold uppercase text-[10px] px-2.5 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer disabled:bg-blueGray-300 dark:disabled:bg-blueGray-700 disabled:cursor-not-allowed flex items-center gap-1 min-h-[32px]"
                           >
-                            Pinjam
-                          </Button>
+                            <ArrowUpRight className="w-3 h-3" aria-hidden="true" />
+                            <span>Pinjam</span>
+                          </button>
                         )}
                         {isAdmin && (
                           <>
@@ -308,18 +319,18 @@ export const ItemList: React.FC<ItemListProps> = ({
                               onClick={() => handleOpenEdit(item)}
                               aria-label={`Ubah data ${item.name}`}
                               title="Ubah data barang"
-                              className="p-2 text-slate-500 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+                              className="p-1.5 text-blueGray-500 hover:text-lightBlue-600 hover:bg-blueGray-100 dark:hover:bg-blueGray-700 rounded transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                             >
-                              <Edit2 className="w-4 h-4" aria-hidden="true" />
+                              <Edit2 className="w-3.5 h-3.5" aria-hidden="true" />
                             </button>
                             <button
                               type="button"
                               onClick={() => handleOpenDelete(item)}
                               aria-label={`Hapus data ${item.name}`}
                               title="Hapus data barang"
-                              className="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+                              className="p-1.5 text-blueGray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                             >
-                              <Trash2 className="w-4 h-4" aria-hidden="true" />
+                              <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                             </button>
                           </>
                         )}
@@ -333,7 +344,6 @@ export const ItemList: React.FC<ItemListProps> = ({
         </div>
       )}
 
-      {/* Add / Edit Modal */}
       <ItemFormModal
         isOpen={isAddEditOpen}
         onClose={() => setIsAddEditOpen(false)}
@@ -341,7 +351,6 @@ export const ItemList: React.FC<ItemListProps> = ({
         initialItem={editingItem}
       />
 
-      {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
         isOpen={!!deletingItem}
         onClose={() => setDeletingItem(null)}

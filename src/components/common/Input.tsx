@@ -24,30 +24,30 @@ export const Input: React.FC<InputProps> = ({
     <div className="w-full">
       <label
         htmlFor={inputId}
-        className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5"
+        className="block uppercase text-blueGray-600 dark:text-blueGray-300 text-xs font-bold mb-1.5"
       >
         {label}
-        {props.required && <span className="text-rose-600 dark:text-rose-400 ml-1" aria-hidden="true">*</span>}
+        {props.required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
       </label>
       <input
         id={inputId}
         disabled={disabled}
         aria-invalid={!!error}
         aria-describedby={error ? errorId : helperText ? helperId : undefined}
-        className={`w-full min-h-[44px] px-3.5 py-2 text-sm rounded-lg border bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:border-transparent ${
+        className={`w-full min-h-[44px] px-3.5 py-2.5 text-sm rounded border bg-white dark:bg-blueGray-800 text-blueGray-700 dark:text-blueGray-100 placeholder:text-blueGray-400 shadow-xs transition-all focus:outline-none focus:ring-2 focus:ring-lightBlue-500 ${
           error
-            ? 'border-rose-500 focus-visible:ring-rose-500'
-            : 'border-slate-300 dark:border-slate-700'
-        } ${disabled ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed' : ''} ${className}`}
+            ? 'border-red-500 focus:ring-red-500'
+            : 'border-blueGray-300 dark:border-blueGray-600'
+        } ${disabled ? 'bg-blueGray-100 dark:bg-blueGray-900 text-blueGray-400 cursor-not-allowed' : ''} ${className}`}
         {...props}
       />
       {error && (
-        <p id={errorId} className="mt-1.5 text-xs text-rose-600 dark:text-rose-400 font-medium" role="alert">
+        <p id={errorId} className="mt-1.5 text-xs text-red-500 font-bold" role="alert">
           {error}
         </p>
       )}
       {!error && helperText && (
-        <p id={helperId} className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+        <p id={helperId} className="mt-1 text-xs text-blueGray-400">
           {helperText}
         </p>
       )}

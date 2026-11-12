@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { User, UserRole } from '../../types';
-import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { UserFormModal } from './UserFormModal';
 import {
@@ -81,28 +80,30 @@ export const UserList: React.FC<UserListProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      {/* Header bar and Add Staff button */}
+      <div className="p-5 rounded-lg border border-blueGray-200 dark:border-blueGray-700 bg-white dark:bg-blueGray-800 shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-            Manajemen Akun Pengguna & Staff
+          <h6 className="text-xs uppercase font-bold text-blueGray-400">
+            Administrasi Pengguna
+          </h6>
+          <h1 className="text-xl font-bold uppercase tracking-tight text-blueGray-800 dark:text-blueGray-100 mt-0.5">
+            Manajemen Akun Staff Laboratorium
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Hak akses Admin: tambah petugas, ubah data kredensial, serta aktifkan atau nonaktifkan akun staff.
-          </p>
         </div>
-        <Button
-          variant="primary"
-          icon={<UserPlus className="w-4 h-4" />}
+        <button
+          type="button"
           onClick={handleOpenAdd}
+          className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-xs px-4 py-2.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1.5"
         >
-          Tambah Akun Staff
-        </Button>
+          <UserPlus className="w-4 h-4" aria-hidden="true" />
+          <span>Tambah Akun Staff</span>
+        </button>
       </div>
 
       {notification && (
         <div
           role="status"
-          className={`p-3 rounded-lg text-xs font-medium border ${
+          className={`p-3 rounded text-xs font-semibold border ${
             notification.type === 'success'
               ? 'bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-800'
               : 'bg-rose-50 text-rose-900 border-rose-200 dark:bg-rose-950/50 dark:text-rose-200 dark:border-rose-800'
@@ -112,56 +113,67 @@ export const UserList: React.FC<UserListProps> = ({
         </div>
       )}
 
-      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-xs">
+      {/* Notus CardTable */}
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white dark:bg-blueGray-800 border border-blueGray-100 dark:border-blueGray-700 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+          <table className="items-center w-full bg-transparent border-collapse text-left text-xs">
+            <thead>
               <tr>
-                <th scope="col" className="py-3.5 px-4">Nama Lengkap</th>
-                <th scope="col" className="py-3.5 px-4">Username</th>
-                <th scope="col" className="py-3.5 px-4">Role Hak Akses</th>
-                <th scope="col" className="py-3.5 px-4 text-center">Status Akun</th>
-                <th scope="col" className="py-3.5 px-4 text-right">Kelola</th>
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  Nama Petugas
+                </th>
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  Username
+                </th>
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  Role Akses
+                </th>
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  Status
+                </th>
+                <th scope="col" className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-right bg-blueGray-50 text-blueGray-500 border-blueGray-100 dark:bg-blueGray-700/80 dark:text-blueGray-300 dark:border-blueGray-600">
+                  Kelola
+                </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-blueGray-100 dark:divide-blueGray-700">
               {users.map((user) => (
                 <tr
                   key={user.id}
-                  className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
+                  className="hover:bg-blueGray-50/70 dark:hover:bg-blueGray-700/40 transition-colors"
                 >
-                  <td className="py-3.5 px-4">
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <div className="flex items-center gap-2.5">
                       <div
-                        className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center select-none"
+                        className="w-8 h-8 rounded-full bg-lightBlue-500 text-white font-bold text-xs flex items-center justify-center shadow select-none"
                         aria-hidden="true"
                       >
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <span className="font-semibold text-slate-900 dark:text-slate-100 block">
+                        <span className="font-bold text-blueGray-800 dark:text-blueGray-100 block text-sm">
                           {user.name}
                         </span>
-                        <span className="text-[11px] text-slate-400">
+                        <span className="text-[10px] text-blueGray-400">
                           ID: {user.id}
                         </span>
                       </div>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-medium text-slate-700 dark:text-slate-300">
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 font-mono font-bold text-blueGray-700 dark:text-blueGray-300">
                     @{user.username}
                   </td>
-                  <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center gap-1.5">
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    <span className="inline-flex items-center gap-1.5 font-bold">
                       {user.role === 'ADMIN' && (
-                        <Shield className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" aria-hidden="true" />
+                        <Shield className="w-3.5 h-3.5 text-lightBlue-600" aria-hidden="true" />
                       )}
-                      <span className="font-semibold text-xs">
+                      <span>
                         {user.role === 'ADMIN' ? 'Administrator' : 'Staff Operasional'}
                       </span>
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 text-center">
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
                     {user.isActive ? (
                       <Badge variant="success" className="text-[10px]">
                         Aktif
@@ -172,38 +184,44 @@ export const UserList: React.FC<UserListProps> = ({
                       </Badge>
                     )}
                   </td>
-                  <td className="py-3.5 px-4 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
                       {user.role === 'STAFF' && (
-                        <Button
-                          size="sm"
-                          variant={user.isActive ? 'outline' : 'secondary'}
-                          icon={
-                            user.isActive ? (
-                              <UserX className="w-3.5 h-3.5 text-rose-600" />
-                            ) : (
-                              <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
-                            )
-                          }
+                        <button
+                          type="button"
                           onClick={() => handleToggle(user.id)}
-                          className="text-xs px-2.5"
+                          className={`font-bold uppercase text-[10px] px-3 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer flex items-center gap-1 min-h-[32px] ${
+                            user.isActive
+                              ? 'bg-blueGray-200 hover:bg-blueGray-300 text-blueGray-700 dark:bg-blueGray-700 dark:hover:bg-blueGray-600 dark:text-blueGray-200'
+                              : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                          }`}
                           title={
                             user.isActive
-                              ? 'Nonaktifkan akun ini (staff tidak bisa login)'
+                              ? 'Nonaktifkan akun staff ini'
                               : 'Aktifkan kembali akun staff ini'
                           }
                         >
-                          {user.isActive ? 'Nonaktifkan' : 'Aktifkan'}
-                        </Button>
+                          {user.isActive ? (
+                            <>
+                              <UserX className="w-3 h-3" />
+                              <span>Nonaktifkan</span>
+                            </>
+                          ) : (
+                            <>
+                              <UserCheck className="w-3 h-3" />
+                              <span>Aktifkan</span>
+                            </>
+                          )}
+                        </button>
                       )}
                       <button
                         type="button"
                         onClick={() => handleOpenEdit(user)}
                         aria-label={`Ubah kredensial ${user.name}`}
                         title="Ubah data atau password"
-                        className="p-2 text-slate-500 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+                        className="p-1.5 text-blueGray-500 hover:text-lightBlue-600 hover:bg-blueGray-100 dark:hover:bg-blueGray-700 rounded transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                       >
-                        <Edit2 className="w-4 h-4" aria-hidden="true" />
+                        <Edit2 className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                     </div>
                   </td>
