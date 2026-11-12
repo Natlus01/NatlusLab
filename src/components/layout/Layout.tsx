@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Navbar } from './Navbar';
 import { Sidebar, ActiveTab } from './Sidebar';
-import { SubmissionModal } from '../submission/SubmissionModal';
 
 interface LayoutProps {
   activeTab: ActiveTab;
@@ -15,7 +14,6 @@ export const Layout: React.FC<LayoutProps> = ({
   children,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSubmissionOpen, setIsSubmissionOpen] = useState(false);
 
   const getPageTitle = (tab: ActiveTab) => {
     switch (tab) {
@@ -34,7 +32,7 @@ export const Layout: React.FC<LayoutProps> = ({
       case 'settings':
         return 'Pengaturan & Cadangan Data';
       default:
-        return 'LabFlow Inventaris';
+        return 'NatlusLab';
     }
   };
 
@@ -52,7 +50,6 @@ export const Layout: React.FC<LayoutProps> = ({
       <div className="relative flex-1 flex flex-col min-w-0 min-h-screen">
         <Navbar
           onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
-          onOpenSubmissionModal={() => setIsSubmissionOpen(true)}
           pageTitle={getPageTitle(activeTab)}
         />
 
@@ -67,20 +64,22 @@ export const Layout: React.FC<LayoutProps> = ({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap items-center md:justify-between justify-center text-xs text-blueGray-500">
               <div className="w-full md:w-6/12 text-center md:text-left">
-                &copy; 2026 <strong>LabFlow</strong> (Inspirasi Desain Notus Tailwind CSS oleh Creative Tim)
+                &copy; 2026 <strong>NatlusLab</strong> - Sistem Manajemen Inventaris Laboratorium
               </div>
               <div className="w-full md:w-6/12 text-center md:text-right mt-2 md:mt-0 font-medium">
-                Laboratorium Komputer &bull; Coding Talent Challenge
+                <a
+                  href="https://lab.natlus.my.id"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-lightBlue-600 hover:underline"
+                >
+                  lab.natlus.my.id
+                </a>
               </div>
             </div>
           </div>
         </footer>
       </div>
-
-      <SubmissionModal
-        isOpen={isSubmissionOpen}
-        onClose={() => setIsSubmissionOpen(false)}
-      />
     </div>
   );
 };

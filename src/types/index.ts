@@ -43,12 +43,3 @@ export interface Transaction {
   createdAt: string;
 }
 
-export interface SubmissionInfo {
-  fullName: string;
-  nim: string;
-  appUrl: string;
-  repoUrl: string;
-  adminDemo: { username: string; password: string };
-  staffDemo: { username: string; password: string };
-  techStack: string[];
-}

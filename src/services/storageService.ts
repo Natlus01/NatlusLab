@@ -350,7 +350,7 @@ export const storageService = {
   exportDatabase(): string {
     const dump = {
       exportedAt: new Date().toISOString(),
-      system: 'LabFlow - Laboratory Inventory & Borrowing System',
+      system: 'NatlusLab - Laboratory Inventory & Borrowing System',
       users: this.getUsers(),
       items: this.getItems(),
       transactions: this.getTransactions(),

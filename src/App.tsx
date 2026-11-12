@@ -12,7 +12,6 @@ import { UserList } from './components/users/UserList';
 import { SettingsView } from './components/settings/SettingsView';
 import { BorrowModal } from './components/transactions/BorrowModal';
 import { ItemFormModal } from './components/items/ItemFormModal';
-import { SubmissionModal } from './components/submission/SubmissionModal';
 
 export const App: React.FC = () => {
   const { currentUser, isAdmin } = useAuth();
@@ -26,7 +25,6 @@ export const App: React.FC = () => {
   const [isBorrowModalOpen, setIsBorrowModalOpen] = useState(false);
   const [selectedBorrowItem, setSelectedBorrowItem] = useState<Item | null>(null);
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
 
   // Sync data with storageService
   const loadData = () => {
@@ -52,15 +50,7 @@ export const App: React.FC = () => {
   }, [isAdmin, activeTab]);
 
   if (!currentUser) {
-    return (
-      <>
-        <LoginPage onOpenSubmissionModal={() => setIsSubmissionModalOpen(true)} />
-        <SubmissionModal
-          isOpen={isSubmissionModalOpen}
-          onClose={() => setIsSubmissionModalOpen(false)}
-        />
-      </>
-    );
+    return <LoginPage />;
   }
 
   // Handlers for Items
@@ -192,7 +182,7 @@ export const App: React.FC = () => {
       )}
 
       {activeTab === 'settings' && isAdmin && (
-        <SettingsView onOpenSubmissionModal={() => setIsSubmissionModalOpen(true)} />
+        <SettingsView />
       )}
 
       {/* Global Modals */}
@@ -215,11 +205,6 @@ export const App: React.FC = () => {
           onSubmit={handleAddItem}
         />
       )}
-
-      <SubmissionModal
-        isOpen={isSubmissionModalOpen}
-        onClose={() => setIsSubmissionModalOpen(false)}
-      />
     </Layout>
   );
 };

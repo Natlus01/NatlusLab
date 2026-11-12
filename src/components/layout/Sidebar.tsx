@@ -112,7 +112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <div className="text-left">
                 <span className="text-sm font-bold uppercase tracking-wider text-blueGray-700 block">
-                  LabFlow
+                  NatlusLab
                 </span>
                 <span className="text-[10px] text-blueGray-400 font-semibold tracking-wide uppercase">
                   Notus Dashboard

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { storageService } from '../../services/storageService';
-import { Button } from '../common/Button';
 import { Download, Upload, RotateCcw, Check, AlertCircle } from 'lucide-react';
 
 interface SettingsViewProps {
-  onOpenSubmissionModal: () => void;
+  onOpenSubmissionModal?: () => void;
 }
 
-export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModal }) => {
+export const SettingsView: React.FC<SettingsViewProps> = () => {
   const [statusMessage, setStatusMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
   const showStatus = (text: string, type: 'success' | 'error' = 'success') => {
@@ -22,7 +21,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModa
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `labflow-backup-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `natluslab-backup-${new Date().toISOString().split('T')[0]}.json`;
       link.click();
       URL.revokeObjectURL(url);
       showStatus('Cadangan data berhasil diunduh ke komputer Anda.');
@@ -150,26 +149,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenSubmissionModa
           <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
           <span>Reset ke Data Awal Pabrik</span>
         </button>
-      </div>
-
-      {/* Submission Information Quick Box */}
-      <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-lightBlue-50 border border-lightBlue-200 rounded-lg shadow-lg p-5">
-        <div>
-          <h6 className="text-xs font-bold uppercase tracking-wider text-lightBlue-800">
-            Format Pengumpulan Tugas (Poin G)
-          </h6>
-          <p className="text-xs text-blueGray-600 mt-1">
-            Salin lembar tugas berisi nama, NIM, URL hosting, repositori, dan akun demo.
-          </p>
-        </div>
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={onOpenSubmissionModal}
-          className="shrink-0"
-        >
-          Buka Lembar Pengumpulan
-        </Button>
       </div>
     </div>
   );

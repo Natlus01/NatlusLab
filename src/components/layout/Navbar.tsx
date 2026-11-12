@@ -1,17 +1,15 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { LogOut, Menu, FileText } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import { Badge } from '../common/Badge';
 
 interface NavbarProps {
   onToggleMobileMenu: () => void;
-  onOpenSubmissionModal: () => void;
   pageTitle?: string;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onToggleMobileMenu,
-  onOpenSubmissionModal,
   pageTitle = 'Dashboard Inventaris Lab',
 }) => {
   const { currentUser, logout, isAdmin } = useAuth();
@@ -40,24 +38,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div className="sm:hidden flex items-center gap-2">
               <span className="text-sm font-bold uppercase tracking-wider text-white">
-                LabFlow
+                NatlusLab
               </span>
             </div>
           </div>
 
           {/* Right: Actions, User Profile, Logout */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              type="button"
-              onClick={onOpenSubmissionModal}
-              title="Informasi Pengumpulan & Akun Demo"
-              aria-label="Informasi Pengumpulan & Akun Demo"
-              className="bg-lightBlue-600 hover:bg-lightBlue-700 text-white text-xs font-bold uppercase px-3 py-2 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer min-h-[40px] flex items-center gap-1.5"
-            >
-              <FileText className="w-3.5 h-3.5" aria-hidden="true" />
-              <span className="hidden md:inline">Info Pengumpulan</span>
-            </button>
-
             {/* User profile pill */}
             {currentUser && (
               <div className="flex items-center gap-2 pl-3 border-l border-blueGray-700">

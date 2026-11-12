@@ -1,7 +1,8 @@
-# Design Direction: LabFlow (Inspired by Creative Tim Notus NextJS)
+# Design Direction: NatlusLab (Inspired by Creative Tim Notus NextJS)
 
 ## 1. Identity & Style Framework
-- **System Name:** LabFlow (Laboratory Inventory & Borrowing Management System)
+- **System Name:** NatlusLab (Laboratory Inventory & Borrowing Management System)
+- **Domain:** lab.natlus.my.id
 - **Design Archetype:** Creative Tim Notus NextJS Tailwind Dashboard UI Kit
 - **Core Philosophy:** High-contrast admin dashboard with `blueGray` foundation, deep header banner with overlapping stat cards (`-mt-24` aesthetic), distinct uppercase section labels, and card tables (`CardTable` pattern).
 

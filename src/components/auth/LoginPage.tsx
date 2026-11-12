@@ -4,10 +4,10 @@ import { Input } from '../common/Input';
 import { Monitor, Shield, ArrowRight } from 'lucide-react';
 
 interface LoginPageProps {
-  onOpenSubmissionModal: () => void;
+  onOpenSubmissionModal?: () => void;
 }
 
-export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) => {
+export const LoginPage: React.FC<LoginPageProps> = () => {
   const { login } = useAuth();
 
   const [username, setUsername] = useState('');
@@ -45,18 +45,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) =
               <div className="w-7 h-7 rounded bg-lightBlue-500 text-white flex items-center justify-center shadow">
                 <Monitor className="w-4 h-4" aria-hidden="true" />
               </div>
-              <span>LabFlow Inventaris</span>
+              <span>NatlusLab</span>
             </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onOpenSubmissionModal}
-              className="bg-lightBlue-600 hover:bg-lightBlue-700 text-white text-xs font-bold uppercase px-3 py-1.5 rounded shadow hover:shadow-md outline-none transition-all cursor-pointer min-h-[40px]"
-            >
-              Info Pengumpulan & Demo
-            </button>
           </div>
         </div>
       </nav>
@@ -65,11 +55,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) =
       <main className="container mx-auto px-4 h-full flex-1 flex items-center justify-center pt-20 pb-12">
         <div className="w-full lg:w-4/12 px-4">
           <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-2xl rounded-lg bg-blueGray-100 border border-blueGray-700">
-            {/* Card Header (Notus Quick OAuth style for Dosen / Examiner) */}
+            {/* Card Header (Quick OAuth style Demo) */}
             <div className="rounded-t mb-0 px-6 py-6 border-b border-blueGray-200">
               <div className="text-center mb-3">
                 <h6 className="text-blueGray-500 text-xs font-bold uppercase tracking-wider">
-                  Pengujian Akun Cepat (Coding Talent Challenge)
+                  Akses Cepat Pengujian Role (Demo)
                 </h6>
               </div>
               <div className="btn-wrapper text-center flex items-center justify-center gap-2">
@@ -153,10 +143,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onOpenSubmissionModal }) =
           <hr className="mb-4 border-b-1 border-blueGray-700" />
           <div className="flex flex-wrap items-center md:justify-between justify-center text-xs text-blueGray-400">
             <div>
-              &copy; 2026 LabFlow - Creative Tim Notus NextJS Design Style
+              &copy; 2026 NatlusLab - Sistem Manajemen Inventaris Laboratorium
             </div>
-            <div className="mt-2 md:mt-0">
-              Laboratorium Komputer &bull; Coding Talent Challenge
+            <div className="mt-2 md:mt-0 font-medium">
+              <a
+                href="https://lab.natlus.my.id"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-lightBlue-400 underline transition-colors"
+              >
+                lab.natlus.my.id
+              </a>
             </div>
           </div>
         </div>
