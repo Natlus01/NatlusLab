@@ -55,9 +55,9 @@ Sistem memiliki dua tingkat hak akses (Role-Based Access Control) terproteksi:
 - Fitur aktivasi dan nonaktivasi instan akun staf tanpa menghapus riwayat transaksi yang pernah diproses.
 
 ### G. Pencadangan & Pemulihan Basis Data
-- Ekspor seluruh basis data inventaris, pengguna, dan transaksi ke berkas JSON terstruktur.
-- Pemulihan (*restore*) data instan melalui fitur impor berkas JSON.
-- Opsi reset ke data awal pabrik.
+- Berkas skema terstruktur di folder `database/schema.sql` untuk inisialisasi basis data PostgreSQL.
+- Ekspor & impor data cadangan berformat JSON langsung dari antarmuka sistem.
+- Prosedur pencadangan SQL berkala melalui `pg_dump`.
 
 ---
 
@@ -83,6 +83,7 @@ Sistem memiliki dua tingkat hak akses (Role-Based Access Control) terproteksi:
 ### Prasyarat
 - **Node.js:** Versi 18 LTS atau 20 LTS
 - **Package Manager:** npm (bawaan Node.js)
+- **Git:** Terpasang di komputer Anda
 
 ### Langkah Pengerjaan
 ```bash
@@ -102,12 +103,12 @@ npm run build
 
 ---
 
-## 5. Panduan Deployment Ubuntu Server + Nginx + PostgreSQL
+## 5. Panduan Lengkap Deployment: Ubuntu Server + Nginx + PostgreSQL
 
 Panduan berikut digunakan untuk menerbitkan aplikasi ke subdomain **`lab.natlus.my.id`** di server mandiri Ubuntu menggunakan Nginx, database PostgreSQL, dan sertifikat SSL gratis Let's Encrypt.
 
 ### Tahap 1: Konfigurasi DNS di Pengelola Domain (`natlus.my.id`)
-Buka panel DNS pengelola domain Anda, lalu tambahkan DNS Record berikut:
+Buka panel DNS pengelola domain Anda (misal Cloudflare, Niagahoster, DomaiNesia, IDCloudHost, dll.), lalu buat DNS Record berikut:
 
 | Type | Name / Host | Target / Value | TTL | Keterangan |
 | :---: | :---: | :---: | :---: | :--- |
@@ -124,12 +125,12 @@ Hubungi server VPS Anda melalui terminal SSH:
 ssh user@IP_PUBLIC_UBUNTU_ANDA
 ```
 
-Perbarui paket sistem dan pasang Nginx, Git, Node.js LTS, Certbot, serta PostgreSQL:
+Perbarui paket sistem dan pasang Nginx, Git, Node.js 20 LTS, Certbot, serta PostgreSQL:
 ```bash
-# 1. Update repository & upgrade paket
+# 1. Update repository & upgrade paket sistem
 sudo apt update && sudo apt upgrade -y
 
-# 2. Pasang Nginx, Git, Curl, dan UFW
+# 2. Pasang Nginx, Git, Curl, dan UFW Firewall
 sudo apt install nginx git curl ufw -y
 
 # 3. Pasang Node.js 20 LTS & npm
@@ -143,142 +144,104 @@ sudo apt install certbot python3-certbot-nginx -y
 sudo apt install postgresql postgresql-contrib -y
 ```
 
-Pastikan layanan PostgreSQL berjalan aktif:
+Pastikan layanan PostgreSQL dan Nginx berjalan aktif:
 ```bash
-sudo systemctl status postgresql
+sudo systemctl status postgresql --no-pager
+sudo systemctl status nginx --no-pager
 ```
 
 ---
 
-### Tahap 3: Konfigurasi & Inisialisasi Database PostgreSQL
-
-1. **Masuk ke prompt PostgreSQL:**
-   ```bash
-   sudo -u postgres psql
-   ```
-
-2. **Buat Database dan User Khusus:**
-   ```sql
-   -- Buat database
-   CREATE DATABASE natluslab_db;
-
-   -- Buat user dengan password aman (ganti 'password_kuat_anda')
-   CREATE USER natluslab_user WITH ENCRYPTED PASSWORD 'password_kuat_anda';
-
-   -- Berikan hak akses penuh ke user
-   GRANT ALL PRIVILEGES ON DATABASE natluslab_db TO natluslab_user;
-
-   -- Hubungkan ke database dan atur schema
-   \c natluslab_db
-   GRANT ALL ON SCHEMA public TO natluslab_user;
-   ```
-
-3. **Skema Tabel PostgreSQL (DDL):**
-   Jalankan query DDL berikut di dalam database `natluslab_db`:
-   ```sql
-   -- 1. Tabel Pengguna (Users)
-   CREATE TABLE IF NOT EXISTS users (
-       id VARCHAR(64) PRIMARY KEY,
-       username VARCHAR(50) UNIQUE NOT NULL,
-       password VARCHAR(255) NOT NULL,
-       name VARCHAR(100) NOT NULL,
-       role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'STAFF')),
-       is_active BOOLEAN DEFAULT TRUE,
-       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-   );
-
-   -- 2. Tabel Inventaris Barang (Items)
-   CREATE TABLE IF NOT EXISTS items (
-       id VARCHAR(64) PRIMARY KEY,
-       code VARCHAR(50) UNIQUE NOT NULL,
-       name VARCHAR(150) NOT NULL,
-       category VARCHAR(100) NOT NULL,
-       stock INTEGER NOT NULL CHECK (stock >= 0),
-       total_stock INTEGER NOT NULL CHECK (total_stock >= 0),
-       borrowed_count INTEGER DEFAULT 0 CHECK (borrowed_count >= 0),
-       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-   );
-
-   -- 3. Tabel Transaksi Sirkulasi (Transactions)
-   CREATE TABLE IF NOT EXISTS transactions (
-       id VARCHAR(64) PRIMARY KEY,
-       transaction_code VARCHAR(50) UNIQUE NOT NULL,
-       borrower_name VARCHAR(100) NOT NULL,
-       item_id VARCHAR(64) NOT NULL REFERENCES items(id) ON DELETE RESTRICT,
-       item_code VARCHAR(50) NOT NULL,
-       item_name VARCHAR(150) NOT NULL,
-       quantity INTEGER NOT NULL CHECK (quantity > 0),
-       borrow_date VARCHAR(50) NOT NULL,
-       return_date VARCHAR(50),
-       status VARCHAR(20) NOT NULL CHECK (status IN ('DIPINJAM', 'SELESAI')),
-       processed_by_user_id VARCHAR(64) NOT NULL REFERENCES users(id),
-       processed_by_user_name VARCHAR(100) NOT NULL,
-       returned_by_user_id VARCHAR(64) REFERENCES users(id),
-       returned_by_user_name VARCHAR(100),
-       notes TEXT,
-       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-   );
-
-   -- Indeks untuk optimasi pencarian
-   CREATE INDEX IF NOT EXISTS idx_items_code ON items(code);
-   CREATE INDEX IF NOT EXISTS idx_transactions_status ON transactions(status);
-   ```
-
-4. **Data Awal (Seed Data SQL):**
-   ```sql
-   -- Masukkan user bawaan
-   INSERT INTO users (id, username, password, name, role, is_active) VALUES
-   ('user-1', 'admin', 'admin123', 'Administrator Utama', 'ADMIN', true),
-   ('user-2', 'staff', 'staff123', 'Staf Laboratorium', 'STAFF', true)
-   ON CONFLICT (username) DO NOTHING;
-
-   -- Masukkan barang inventaris awal
-   INSERT INTO items (id, code, name, category, stock, total_stock, borrowed_count) VALUES
-   ('item-1', 'BR001', 'Laptop Lenovo', 'Laptop & Komputer', 5, 5, 0),
-   ('item-2', 'BR002', 'Mouse Logitech', 'Aksesori & Periferal', 10, 10, 0),
-   ('item-3', 'BR003', 'Keyboard Mechanical', 'Aksesori & Periferal', 8, 8, 0),
-   ('item-4', 'BR004', 'Proyektor Epson', 'Audio Visual & Presentasi', 3, 3, 0),
-   ('item-5', 'BR005', 'Monitor LG', 'Display & Monitor', 6, 6, 0),
-   ('item-6', 'BR006', 'Router MikroTik RB750Gr3', 'Perangkat Jaringan', 4, 4, 0),
-   ('item-7', 'BR007', 'Switch Cisco Catalyst 2960', 'Perangkat Jaringan', 2, 2, 0),
-   ('item-8', 'BR008', 'Crimping Tool & LAN Tester', 'Peralatan & Perkakas Lab', 5, 5, 0),
-   ('item-9', 'BR009', 'Webcam Logitech C920 Pro', 'Audio Visual & Presentasi', 6, 6, 0),
-   ('item-10', 'BR010', 'Toolkit Obeng Presisi', 'Peralatan & Perkakas Lab', 7, 7, 0)
-   ON CONFLICT (code) DO NOTHING;
-   ```
-   Ketik `\q` untuk keluar dari psql.
-
----
-
-### Tahap 4: Unduh Proyek dan Build Berkas Produksi di Server
+### Tahap 3: Unduh Proyek via Git Clone ke Server
 Siapkan direktori aplikasi pada `/var/www/natluslab`:
 ```bash
 # 1. Buat folder direktori dan atur kepemilikan user
 sudo mkdir -p /var/www/natluslab
 sudo chown -R $USER:$USER /var/www/natluslab
 
-# 2. Clone repositori dari GitHub
+# 2. Clone repositori resmi dari GitHub
 git clone https://github.com/Natlus01/NatlusLab.git /var/www/natluslab
 
-# 3. Masuk ke direktori dan pasang dependensi
+# 3. Masuk ke direktori proyek
 cd /var/www/natluslab
-npm install
 
-# 4. Bangun berkas statis produksi
-npm run build
+# 4. Pasang berkas environment contoh
+cp .env.example .env
 ```
-Setelah proses build selesai, berkas web siap saji akan berada di folder `/var/www/natluslab/dist`.
 
 ---
 
-### Tahap 5: Konfigurasi Virtual Host Nginx
+### Tahap 4: Inisialisasi & Konfigurasi Database PostgreSQL
+
+#### A. Buat Database dan User Khusus
+Masuk ke prompt PostgreSQL:
+```bash
+sudo -u postgres psql
+```
+
+Jalankan perintah SQL berikut:
+```sql
+-- 1. Buat database baru
+CREATE DATABASE natluslab_db;
+
+-- 2. Buat user khusus (ganti 'password_rahasia_anda' dengan kata sandi yang kuat)
+CREATE USER natluslab_user WITH ENCRYPTED PASSWORD 'password_rahasia_anda';
+
+-- 3. Berikan hak akses penuh ke user
+GRANT ALL PRIVILEGES ON DATABASE natluslab_db TO natluslab_user;
+
+-- 4. Pindah ke database dan atur skema publik
+\c natluslab_db
+GRANT ALL ON SCHEMA public TO natluslab_user;
+
+-- Keluar dari prompt
+\q
+```
+
+#### B. Eksekusi Skema Tabel & Data Awal Otomatis
+Eksekusi berkas `database/schema.sql` yang sudah tersedia di repositori:
+```bash
+# Impor seluruh tabel (users, items, transactions) dan seed data
+psql -U natluslab_user -d natluslab_db -h localhost -f /var/www/natluslab/database/schema.sql
+```
+*(Masukkan kata sandi `natluslab_user` saat diminta).*
+
+#### C. Verifikasi Tabel Basis Data
+Periksa apakah seluruh tabel telah terbuat dengan benar:
+```bash
+psql -U natluslab_user -d natluslab_db -h localhost -c "\dt"
+```
+Periksa data awal barang:
+```bash
+psql -U natluslab_user -d natluslab_db -h localhost -c "SELECT code, name, category, stock FROM items LIMIT 5;"
+```
+
+---
+
+### Tahap 5: Bangun Berkas Produksi Aplikasi (Build)
+Di dalam direktori `/var/www/natluslab`, jalankan instalasi dependensi dan kompilasi:
+```bash
+cd /var/www/natluslab
+npm install
+npm run build
+```
+Hasil kompilasi siap saji akan berada di folder `/var/www/natluslab/dist`.
+
+Atur izin akses direktori agar Nginx dapat membaca berkas web:
+```bash
+sudo chown -R www-data:www-data /var/www/natluslab/dist
+sudo chmod -R 755 /var/www/natluslab/dist
+```
+
+---
+
+### Tahap 6: Konfigurasi Virtual Host Nginx
 Buat berkas konfigurasi Nginx baru untuk subdomain:
 ```bash
 sudo nano /etc/nginx/sites-available/lab.natlus.my.id
 ```
 
-Salin dan tempel konfigurasi berikut:
+Salin dan tempel blok konfigurasi berikut:
 ```nginx
 server {
     listen 80;
@@ -288,25 +251,25 @@ server {
     root /var/www/natluslab/dist;
     index index.html;
 
-    # Kompresi Gzip untuk kecepatan loading aset
+    # Kompresi Gzip untuk performa kecepatan loading
     gzip on;
     gzip_vary on;
     gzip_min_length 1024;
     gzip_proxied expired no-cache no-store private auth;
     gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml application/javascript application/json;
 
-    # Routing SPA: seluruh rute dialihkan ke index.html
+    # Routing Single Page Application (SPA): rute dialihkan ke index.html
     location / {
         try_files $uri $uri/ /index.html;
     }
 
-    # Browser Caching untuk aset statis Vite (JS, CSS, Media, Font)
+    # Browser Caching untuk berkas aset statis (JS, CSS, Gambar, Font)
     location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
 
-    # Header Keamanan
+    # Header Pengamanan
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
@@ -314,29 +277,29 @@ server {
 ```
 Simpan perubahan (`Ctrl + O`, lalu `Enter`, kemudian keluar dengan `Ctrl + X`).
 
-Aktifkan konfigurasi dengan membuat *symbolic link* ke `sites-enabled`:
+Aktifkan konfigurasi Nginx:
 ```bash
-# Buat symlink
+# Buat tautan simbolis (symlink)
 sudo ln -s /etc/nginx/sites-available/lab.natlus.my.id /etc/nginx/sites-enabled/
 
-# Uji apakah sintaks konfigurasi Nginx sudah benar
+# Uji sintaks konfigurasi
 sudo nginx -t
 
-# Muat ulang layanan Nginx
+# Muat ulang Nginx
 sudo systemctl reload nginx
 ```
 
 ---
 
-### Tahap 6: Pasang Sertifikat SSL HTTPS Gratis (Certbot Let's Encrypt)
-Jalankan perintah Certbot untuk memasang sertifikat keamanan SSL otomatis pada domain Anda:
+### Tahap 7: Pasang Sertifikat SSL HTTPS Gratis (Certbot Let's Encrypt)
+Jalankan Certbot untuk mengamankan domain dengan enkripsi SSL otomatis:
 ```bash
 sudo certbot --nginx -d lab.natlus.my.id
 ```
 
-- Masukkan alamat email Anda untuk pemberitahuan pembaruan keamanan.
-- Setujui syarat dan ketentuan (*Terms of Service*).
-- Pilih opsi **Redirect HTTP to HTTPS** agar seluruh lalu lintas HTTP secara otomatis diarahkan ke HTTPS.
+- Masukkan alamat email aktif Anda untuk peringatan pembaruan keamanan.
+- Ketik `Y` untuk menyetujui *Terms of Service*.
+- Pilih opsi **Redirect HTTP to HTTPS** agar semua koneksi otomatis dialihkan ke HTTPS.
 
 Uji coba mekanisme perpanjangan otomatis (*auto-renewal*):
 ```bash
@@ -345,8 +308,8 @@ sudo certbot renew --dry-run
 
 ---
 
-### Tahap 7: Pengaturan Firewall (UFW)
-Pastikan port SSH dan Web (HTTP & HTTPS) diizinkan:
+### Tahap 8: Pengaturan Keamanan Firewall (UFW)
+Aktifkan firewall Ubuntu untuk membuka hanya port SSH dan Web:
 ```bash
 sudo ufw allow OpenSSH
 sudo ufw allow 'Nginx Full'
@@ -356,10 +319,10 @@ sudo ufw status
 
 ---
 
-### Tahap 8: Prosedur Pembaruan & Pencadangan Data
+### Tahap 9: Pemeliharaan & Backup Otomatis Database
 
-#### 1. Alur Pembaruan Kode Aplikasi
-Jika ada pembaruan kode di GitHub:
+#### 1. Alur Pembaruan Kode Aplikasi (Update Routine)
+Jika ada perubahan kode di GitHub yang ingin diterapkan ke server:
 ```bash
 cd /var/www/natluslab
 git pull origin main
@@ -368,23 +331,53 @@ npm run build
 sudo systemctl reload nginx
 ```
 
-#### 2. Pencadangan Basis Data PostgreSQL
-Untuk membuat backup database secara berkala:
+#### 2. Pencadangan Rutin Basis Data PostgreSQL
+Buat direktori penyimpanan cadangan:
 ```bash
-# Backup ke file .sql
-pg_dump -U natluslab_user -d natluslab_db -h localhost > backup_$(date +%F).sql
+sudo mkdir -p /var/backups/natluslab
+sudo chown -R $USER:$USER /var/backups/natluslab
+```
 
-# Restore dari file .sql jika diperlukan
-psql -U natluslab_user -d natluslab_db -h localhost < backup_file.sql
+Ekspor database ke berkas SQL:
+```bash
+pg_dump -U natluslab_user -d natluslab_db -h localhost > /var/backups/natluslab/backup_$(date +%F_%H%M%S).sql
+```
+
+Pulihkan (*restore*) database dari berkas cadangan jika diperlukan:
+```bash
+psql -U natluslab_user -d natluslab_db -h localhost < /var/backups/natluslab/nama_file_backup.sql
+```
+
+#### 3. Otomatisasi Backup Harian (Cron Job)
+Buka crontab:
+```bash
+crontab -e
+```
+Tambahkan baris berikut di bagian paling bawah untuk melakukan backup otomatis setiap jam 02:00 pagi:
+```text
+0 2 * * * pg_dump -U natluslab_user -d natluslab_db -h localhost > /var/backups/natluslab/backup_$(date +\%F).sql 2>> /var/backups/natluslab/backup.log
 ```
 
 ---
 
-## 6. Struktur Direktori Proyek
+## 6. Panduan Pemecahan Masalah (Troubleshooting)
+
+| Gejala Masalah | Penyebab Umum | Solusi Praktis |
+| :--- | :--- | :--- |
+| **Error 403 Forbidden** saat membuka web | Izin berkas (*permissions*) pada folder `/dist` belum dapat dibaca oleh user web server | Jalankan `sudo chown -R www-data:www-data /var/www/natluslab/dist` dan `sudo chmod -R 755 /var/www/natluslab/dist` |
+| **Error 404 Not Found** saat refresh halaman selain root | Konfigurasi SPA router belum aktif di Nginx | Pastikan baris `try_files $uri $uri/ /index.html;` ada di dalam blok `location /` berkas `/etc/nginx/sites-available/lab.natlus.my.id` |
+| **Password authentication failed for user "natluslab_user"** | Metode autentikasi PostgreSQL lokal diatur ke `peer` | Buka `/etc/postgresql/*/main/pg_hba.conf`, ubah baris `local all all peer` atau `127.0.0.1/32` menjadi metode `scram-sha-256` atau `md5`, lalu jalankan `sudo systemctl restart postgresql` |
+| **Certbot SSL Gagal Memverifikasi Domain** | DNS belum terpropagasi atau terhalang Cloudflare Proxy | Pastikan status proxy di Cloudflare adalah **DNS Only** (awan abu-abu) sebelum menjalankan `certbot`, dan pastikan Record A sudah mengarah ke IP VPS yang benar |
+
+---
+
+## 7. Struktur Direktori Proyek
 
 ```text
 NatlusLab/
-├── dist/                   # Hasil kompilasi statis produksi (yang dilayani oleh Nginx)
+├── database/
+│   └── schema.sql          # Skema DDL tabel PostgreSQL & seed data bawaan
+├── dist/                   # Berkas kompilasi statis produksi (dilayani oleh Nginx)
 ├── src/
 │   ├── components/         # Komponen UI modular
 │   │   ├── auth/           # Halaman Login & otentikasi role
@@ -402,7 +395,9 @@ NatlusLab/
 │   ├── App.tsx             # Root router & penanganan state utama
 │   ├── index.css           # Styling Tailwind CSS
 │   └── main.tsx            # Entry point aplikasi React
-├── index.html              # HTML shell aplikasi
+├── .env.example            # Contoh variabel lingkungan server & PostgreSQL
+├── .gitignore              # Daftar berkas terabaikan dari Git
+├── index.html              # Shell HTML aplikasi
 ├── package.json            # Daftar dependensi & script proyek
 ├── tailwind.config.js      # Konfigurasi palet warna & tema Notus
 └── vite.config.ts          # Konfigurasi bundler Vite
@@ -410,6 +405,6 @@ NatlusLab/
 
 ---
 
-## 7. Lisensi & Pemeliharaan
+## 8. Lisensi & Pemeliharaan
 
 Dikelola dan dipelihara secara mandiri oleh tim **Natlus** untuk operasional pengelolaan inventaris laboratorium komputer.
